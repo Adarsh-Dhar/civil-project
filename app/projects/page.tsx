@@ -1,75 +1,98 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { Search, Plus, Grid3x3, List, Filter } from 'lucide-react';
+import { Search, Plus, Grid3x3, List, Filter, X } from 'lucide-react';
 
-const PROJECTS = [
-  {
-    id: '1',
-    name: 'Skyline Tower',
-    location: 'Downtown District',
-    status: 'Construction',
-    progress: 65,
-    owner: 'Alice Morgan',
-    team: 4,
-    startDate: '2024-01-15',
-    endDate: '2025-06-30',
-  },
-  {
-    id: '2',
-    name: 'Riverfront Villa',
-    location: 'Waterside Estate',
-    status: 'Planning',
-    progress: 25,
-    owner: 'Bob Collins',
-    team: 3,
-    startDate: '2024-03-01',
-    endDate: '2025-12-31',
-  },
-  {
-    id: '3',
-    name: 'Urban Shopping Complex',
-    location: 'Central Hub',
-    status: 'Completed',
-    progress: 100,
-    owner: 'Charlie Davis',
-    team: 6,
-    startDate: '2023-06-01',
-    endDate: '2024-12-15',
-  },
-];
+interface Project {
+  id: string;
+  name: string;
+  description?: string;
+  status: string;
+  owner: { name: string };
+  team?: { name: string };
+  _count: { proofs: number; compliance: number };
+}
 
 export default function ProjectsPage() {
   const [view, setView] = useState<'grid' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newProjectName, setNewProjectName] = useState('');
+  const [newProjectDescription, setNewProjectDescription] = useState('');
 
-  const filteredProjects = PROJECTS.filter(p =>
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const fetchProjects = async () => {
+    try {
+      const response = await fetch('/api/projects');
+      if (response.ok) {
+        const data = await response.json();
+        setProjects(data.projects);
+      }
+    } catch (error) {
+      console.error('Failed to fetch projects:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createProject = async () => {
+    if (!newProjectName.trim()) return;
+
+    try {
+      const response = await fetch('/api/projects', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: newProjectName,
+          description: newProjectDescription,
+        }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setProjects([...projects, data.project]);
+        setShowCreateModal(false);
+        setNewProjectName('');
+        setNewProjectDescription('');
+      }
+    } catch (error) {
+      console.error('Failed to create project:', error);
+    }
+  };
+
+  const filteredProjects = projects.filter(p =>
     p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (p.description && p.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
     p.location.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Planning':
+      case 'planning':
         return 'bg-blue-50 text-blue-700 border-blue-200';
-      case 'Construction':
+      case 'active':
         return 'bg-amber-50 text-amber-700 border-amber-200';
-      case 'Completed':
+      case 'completed':
         return 'bg-emerald-50 text-emerald-700 border-emerald-200';
       default:
         return 'bg-gray-50 text-gray-700 border-gray-200';
     }
   };
 
-  const getProgressColor = (progress: number) => {
-    if (progress >= 75) return 'bg-emerald-500';
-    if (progress >= 50) return 'bg-amber-500';
-    if (progress >= 25) return 'bg-blue-500';
-    return 'bg-gray-300';
-  };
+  if (loading) {
+    return (
+      <div className="p-4 sm:p-6 lg:p-8">
+        <div className="text-center">Loading projects...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
@@ -79,7 +102,10 @@ export default function ProjectsPage() {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Projects</h1>
           <p className="text-gray-600 text-sm mt-1">Manage all your construction projects</p>
         </div>
-        <Button className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-lg px-4 py-2 flex items-center gap-2">
+        <Button
+          onClick={() => setShowCreateModal(true)}
+          className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-lg px-4 py-2 flex items-center gap-2"
+        >
           <Plus className="w-4 h-4" />
           <span className="hidden sm:inline">New Project</span>
         </Button>
@@ -127,20 +153,7 @@ export default function ProjectsPage() {
               <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-gray-200 hover:border-indigo-300 hover:shadow-lg transition cursor-pointer h-full">
                 <div className="mb-4">
                   <h3 className="font-semibold text-gray-900 text-base sm:text-lg mb-1">{project.name}</h3>
-                  <p className="text-xs sm:text-sm text-gray-600">{project.location}</p>
-                </div>
-
-                <div className="mb-4 space-y-2">
-                  <div className="flex items-center justify-between text-xs sm:text-sm">
-                    <span className="text-gray-600">Progress</span>
-                    <span className="font-medium text-gray-900">{project.progress}%</span>
-                  </div>
-                  <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full ${getProgressColor(project.progress)} transition-all`}
-                      style={{ width: `${project.progress}%` }}
-                    ></div>
-                  </div>
+                  <p className="text-xs sm:text-sm text-gray-600">{project.description || 'No description'}</p>
                 </div>
 
                 <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
@@ -149,13 +162,15 @@ export default function ProjectsPage() {
                   </span>
                   <div className="flex items-center gap-1">
                     <div className="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center text-xs font-medium text-indigo-600">
-                      +{project.team}
+                      {project._count.proofs}
                     </div>
+                    <span className="text-xs text-gray-500">proofs</span>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between text-xs text-gray-600">
-                  <span>Est. {new Date(project.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                  <span>Owner: {project.owner.name}</span>
+                  {project.team && <span>Team: {project.team.name}</span>}
                 </div>
               </div>
             </Link>
@@ -173,7 +188,7 @@ export default function ProjectsPage() {
                   <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-900">Project</th>
                   <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-900 hidden sm:table-cell">Status</th>
                   <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-900 hidden md:table-cell">Owner</th>
-                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-900">Progress</th>
+                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-900">Proofs</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -182,7 +197,7 @@ export default function ProjectsPage() {
                     <td className="px-4 sm:px-6 py-4">
                       <Link href={`/projects/${project.id}`} className="block">
                         <p className="font-medium text-indigo-600 hover:text-indigo-700 text-sm">{project.name}</p>
-                        <p className="text-xs text-gray-500">{project.location}</p>
+                        <p className="text-xs text-gray-500">{project.description || 'No description'}</p>
                       </Link>
                     </td>
                     <td className="px-4 sm:px-6 py-4 hidden sm:table-cell">
@@ -191,23 +206,67 @@ export default function ProjectsPage() {
                       </span>
                     </td>
                     <td className="px-4 sm:px-6 py-4 hidden md:table-cell">
-                      <p className="text-sm text-gray-600">{project.owner}</p>
+                      <p className="text-sm text-gray-600">{project.owner.name}</p>
                     </td>
                     <td className="px-4 sm:px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden max-w-xs">
-                          <div
-                            className={`h-full ${getProgressColor(project.progress)}`}
-                            style={{ width: `${project.progress}%` }}
-                          ></div>
-                        </div>
-                        <span className="text-xs font-medium text-gray-600 w-10 text-right">{project.progress}%</span>
-                      </div>
+                      <span className="text-sm font-medium text-gray-900">{project._count.proofs}</span>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* Create Project Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold">Create New Project</h2>
+              <button onClick={() => setShowCreateModal(false)}>
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Project Name</label>
+                <input
+                  type="text"
+                  value={newProjectName}
+                  onChange={(e) => setNewProjectName(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Enter project name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Description</label>
+                <textarea
+                  value={newProjectDescription}
+                  onChange={(e) => setNewProjectDescription(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Enter project description"
+                  rows={3}
+                />
+              </div>
+            </div>
+            <div className="flex gap-3 mt-6">
+              <Button
+                onClick={() => setShowCreateModal(false)}
+                variant="outline"
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={createProject}
+                className="flex-1 bg-indigo-600 hover:bg-indigo-700"
+                disabled={!newProjectName.trim()}
+              >
+                Create
+              </Button>
+            </div>
           </div>
         </div>
       )}

@@ -5,12 +5,10 @@ import React from "react"
 import { useState } from 'react';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
-  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
@@ -30,12 +28,14 @@ export default function LoginPage() {
 
       if (result?.error) {
         setError('Invalid email or password');
+        setLoading(false);
       } else if (result?.ok) {
-        router.push('/dashboard');
+        // Manually redirect to dashboard on success
+        window.location.href = '/dashboard';
       }
     } catch (err) {
+      console.error('Sign in error:', err);
       setError('Something went wrong. Please try again.');
-    } finally {
       setLoading(false);
     }
   };
@@ -63,13 +63,6 @@ export default function LoginPage() {
               {error}
             </div>
           )}
-
-          {/* Test Credentials Info */}
-          <div className="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-xs text-blue-700 font-medium mb-1">Demo Credentials:</p>
-            <p className="text-xs text-blue-600">Email: test@gmail.com</p>
-            <p className="text-xs text-blue-600">Password: test123</p>
-          </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email */}
@@ -150,12 +143,6 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Demo Info */}
-        <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <p className="text-xs text-blue-800">
-            <span className="font-semibold">Demo Account:</span> Use any email and password to test the app.
-          </p>
-        </div>
       </div>
     </div>
   );

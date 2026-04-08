@@ -1,18 +1,13 @@
+import NextAuth from "next-auth";
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import EmailProvider from "next-auth/providers/email";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import prisma from "@/lib/prisma";
+import bcrypt from "bcryptjs";
 
-// Test credentials
-const testUsers = [
-  {
-    id: "1",
-    email: "test@gmail.com",
-    password: "test123",
-    name: "Test User",
-    role: "Project Manager",
-  },
-];
-
-export const authConfig = {
+const authConfig = {
+  adapter: PrismaAdapter(prisma),
   pages: {
     signIn: "/auth/login",
     signUp: "/auth/signup",
@@ -25,9 +20,9 @@ export const authConfig = {
         pathname.startsWith("/auth/signup") ||
         pathname.startsWith("/auth/onboarding");
 
-      // Redirect authenticated users away from auth pages
-      if (isOnAuthPage && isLoggedIn) {
-        return false; // Will redirect to default redirect URL
+      // Redirect authenticated users away from login/signup to dashboard, but allow onboarding
+      if ((pathname.startsWith("/auth/login") || pathname.startsWith("/auth/signup")) && isLoggedIn) {
+        return Response.redirect(new URL('/auth/onboarding', request.url));
       }
 
       // Allow access to auth pages for unauthenticated users
@@ -40,7 +35,7 @@ export const authConfig = {
     },
     async jwt({ token, user }) {
       if (user) {
-        token.role = (user as any).role;
+        token.role = user.role;
         token.id = user.id;
       }
       return token;
@@ -52,31 +47,69 @@ export const authConfig = {
       }
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
+    },
   },
   providers: [
     Credentials({
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
 
-        const user = testUsers.find(
-          (u) =>
-            u.email === credentials.email &&
-            u.password === credentials.password
-        );
+        try {
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email as string },
+          });
 
-        if (user) {
+          if (!user || !user.password) {
+            return null;
+          }
+
+          const isPasswordValid = await bcrypt.compare(
+            credentials.password as string,
+            user.password
+          );
+
+          if (!isPasswordValid) {
+            return null;
+          }
+
           return {
             id: user.id,
             email: user.email,
             name: user.name,
-            role: user.role,
           };
+        } catch (error) {
+          console.error("Auth error:", error);
+          return null;
         }
-
-        return null;
       },
+    }),
+    EmailProvider({
+      server: {
+        host: process.env.EMAIL_SERVER_HOST,
+        port: parseInt(process.env.EMAIL_SERVER_PORT || '587'),
+        auth: {
+          user: process.env.EMAIL_SERVER_USER,
+          pass: process.env.EMAIL_SERVER_PASS,
+        },
+      },
+      from: process.env.EMAIL_FROM,
     }),
   ],
 } satisfies NextAuthConfig;
+
+export { authConfig };
+
+const authResult = NextAuth(authConfig);
+export const { auth, handlers, signIn, signOut } = authResult;

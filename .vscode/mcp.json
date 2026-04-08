@@ -1,0 +1,9 @@
+{
+	"servers": {
+		"prisma-postgres": {
+			"url": "https://mcp.prisma.io/mcp",
+			"type": "http"
+		}
+	},
+	"inputs": []
+}

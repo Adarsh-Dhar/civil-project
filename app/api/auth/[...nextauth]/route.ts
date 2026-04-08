@@ -7,4 +7,5 @@ const handler = NextAuth({
   trustHost: true,
 });
 
+export const auth = handler.auth;
 export { handler as GET, handler as POST };

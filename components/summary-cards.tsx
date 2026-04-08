@@ -1,6 +1,6 @@
 'use client';
 
-import React from "react"
+import React, { useState, useEffect } from "react"
 
 import { TrendingUp, TrendingDown } from 'lucide-react';
 
@@ -47,12 +47,42 @@ export function SummaryCard({ title, value, trend, unit }: SummaryCardProps) {
 }
 
 export function SummaryCardsSection() {
+  const [summary, setSummary] = useState({
+    totalProjects: 0,
+    activeProjects: 0,
+    totalProofs: 0,
+    complianceItems: 0,
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchSummary();
+  }, []);
+
+  const fetchSummary = async () => {
+    try {
+      const response = await fetch('/api/dashboard/summary');
+      if (response.ok) {
+        const data = await response.json();
+        setSummary(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch summary:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const cards = [
-    { title: 'Total Projects', value: 12, trend: 8, unit: '+2 this month' },
-    { title: 'On-Track', value: 9, trend: 5, unit: 'Projects' },
-    { title: 'Delayed', value: 2, trend: -15, unit: 'In progress' },
-    { title: 'Compliance Issues', value: 1, trend: -50, unit: 'Resolved' },
+    { title: 'Total Projects', value: summary.totalProjects, trend: 8, unit: 'Active' },
+    { title: 'Active Projects', value: summary.activeProjects, trend: 5, unit: 'In progress' },
+    { title: 'Total Proofs', value: summary.totalProofs, trend: 10, unit: 'Uploaded' },
+    { title: 'Compliance Items', value: summary.complianceItems, trend: -2, unit: 'Pending' },
   ];
+
+  if (loading) {
+    return <div>Loading summary...</div>;
+  }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">

@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, Building2, Users, Shield } from 'lucide-react';
 
@@ -14,17 +15,62 @@ const ROLES = [
 
 export default function OnboardingPage() {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const [step, setStep] = useState(1);
   const [selectedRole, setSelectedRole] = useState('pm');
   const [companyName, setCompanyName] = useState('');
+  const [teamSize, setTeamSize] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth/login');
+    }
+  }, [status, router]);
+
+  // Show loading state while checking auth
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleNext = async () => {
     if (step < 3) {
       setStep(step + 1);
     } else {
       setLoading(true);
-      router.push('/dashboard');
+      try {
+        const response = await fetch('/api/onboarding', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            preferences: {
+              role: selectedRole,
+              companyName,
+              teamSize,
+            },
+          }),
+        });
+        if (response.ok) {
+          // Wait a moment for the response to be fully processed
+          setTimeout(() => {
+            router.push('/dashboard');
+          }, 300);
+        } else {
+          console.error('Onboarding failed');
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('Onboarding error:', error);
+        setLoading(false);
+      }
     }
   };
 
@@ -120,7 +166,10 @@ export default function OnboardingPage() {
                     {['1-10', '11-50', '50+'].map((size) => (
                       <button
                         key={size}
-                        className="px-4 py-2 border border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition text-sm font-medium text-gray-700"
+                        onClick={() => setTeamSize(size)}
+                        className={`px-4 py-2 border rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition text-sm font-medium ${
+                          teamSize === size ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-gray-300 text-gray-700'
+                        }`}
                       >
                         {size}
                       </button>
@@ -139,7 +188,7 @@ export default function OnboardingPage() {
                 </Button>
                 <Button
                   onClick={handleNext}
-                  disabled={!companyName}
+                  disabled={!companyName || !teamSize}
                   className="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-lg py-2.5 font-medium disabled:opacity-50"
                 >
                   Continue

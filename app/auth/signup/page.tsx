@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { BsEyeFill, BsEye } from 'react-icons/bs'; // Import eye icons
 import { useState } from 'react'; // Import useState for managing state
@@ -12,10 +13,63 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false); // Declare showPassword state
   const [loading, setLoading] = useState(false); // Declare loading state
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     setLoading(true);
-    // Handle form submission logic here
+
+    if (formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.fullName,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      if (response.ok) {
+        // Automatically sign in the user after successful signup
+        const signInResult = await signIn('credentials', {
+          email: formData.email,
+          password: formData.password,
+          redirect: false,
+          callbackUrl: '/auth/onboarding',
+        });
+
+        if (signInResult?.error) {
+          router.push('/auth/login?message=Account created. Please log in.');
+          return;
+        }
+
+        if (signInResult?.url) {
+          window.location.href = signInResult.url;
+          return;
+        }
+
+        if (signInResult?.ok) {
+          router.push('/auth/onboarding');
+          return;
+        }
+
+        router.push('/auth/login?message=Account created. Please log in.');
+      } else {
+        const error = await response.json();
+        alert(error.error || 'Signup failed');
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      alert('An error occurred during signup');
+    }
+
     setLoading(false);
   };
 
@@ -36,27 +90,13 @@ export default function SignupPage() {
         {/* Info Card */}
         <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-lg space-y-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">Demo Account</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Create Your Account</h2>
             <p className="text-gray-600 mb-4">
-              Use the test credentials to explore LoopBuild. In production, signup functionality would create real accounts with email verification.
+              Join LoopBuild to manage your construction projects efficiently.
             </p>
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-left">
-            <p className="text-xs font-semibold text-blue-700 mb-3">Test Account Credentials:</p>
-            <div className="space-y-2 text-sm text-blue-600 font-mono">
-              <p><span className="font-semibold">Email:</span> test@gmail.com</p>
-              <p><span className="font-semibold">Password:</span> test123</p>
-            </div>
-          </div>
-
           <div className="space-y-3">
-            <Button 
-              onClick={() => router.push('/auth/login')}
-              className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-full py-2.5 font-medium"
-            >
-              Login with Test Account
-            </Button>
             <p className="text-sm text-gray-600">
               Already have an account?{' '}
               <Link href="/auth/login" className="text-indigo-600 hover:text-indigo-700 font-medium">

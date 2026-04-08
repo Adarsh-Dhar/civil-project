@@ -2,27 +2,43 @@
 
 ## Overview
 
-LoopBuild uses **NextAuth.js** with Credentials provider for email/password authentication. All routes are protected with automatic redirection to login for unauthenticated users.
+LoopBuild uses **NextAuth.js v4** with **Prisma database adapter** for secure email/password authentication. Users can sign up, log in, and reset passwords. All routes are protected with automatic redirection to login for unauthenticated users.
 
-## Test Credentials
+## Database Setup
 
-```
-Email:    test@gmail.com
-Password: test123
+- **Database**: SQLite (development) / PostgreSQL (production)
+- **ORM**: Prisma with NextAuth adapter
+- **Models**: User, Account, Session, VerificationToken
+
+## Environment Variables
+
+Create `.env.local` with:
+
+```bash
+NEXTAUTH_SECRET=your-super-secret-key-change-this-in-production
+NEXTAUTH_URL=http://localhost:3000
+DATABASE_URL="file:./dev.db"
+
+# Email configuration (optional for password reset)
+EMAIL_SERVER_HOST=smtp.gmail.com
+EMAIL_SERVER_PORT=587
+EMAIL_SERVER_USER=your-email@gmail.com
+EMAIL_SERVER_PASS=your-app-password
+EMAIL_FROM=noreply@yourdomain.com
 ```
 
 ## Architecture
 
-### Files Created
+### Files Created/Updated
 
-1. **`/lib/auth.ts`** - NextAuth configuration with Credentials provider
-2. **`/auth.ts`** - NextAuth instance wrapper
+1. **`/prisma/schema.prisma`** - Database schema with NextAuth models
+2. **`/lib/auth.ts`** - NextAuth configuration with Credentials and Email providers
 3. **`/app/api/auth/[...nextauth]/route.ts`** - NextAuth API route handler
-4. **`/proxy.ts`** - Request interceptor for route protection (Next.js 16)
-5. **`/app/providers.tsx`** - SessionProvider wrapper for client-side session
-6. **`/app/auth/layout.tsx`** - Auth pages layout styling
-7. **`/app/auth/login/page.tsx`** - Login page with NextAuth integration
-8. **`/app/auth/signup/page.tsx`** - Demo signup page (redirects to login)
+4. **`/app/api/signup/route.ts`** - Custom signup API for user registration
+5. **`/app/auth/signup/page.tsx`** - Real signup form with validation
+6. **`/app/providers.tsx`** - SessionProvider wrapper for client-side session
+7. **`/app/auth/layout.tsx`** - Auth pages layout styling
+8. **`/app/auth/login/page.tsx`** - Login page with NextAuth integration
 9. **`/app/auth/onboarding/page.tsx`** - Onboarding flow after login
 
 ### Key Components Updated
@@ -34,13 +50,13 @@ Password: test123
 ## Authentication Flow
 
 ```
-1. User visits any protected route (e.g., /dashboard)
-2. Proxy.ts checks if user is authenticated
-3. If not authenticated → Redirect to /auth/login
-4. User enters credentials (test@gmail.com / test123)
-5. NextAuth Credentials provider validates credentials
-6. If valid → Create session and redirect to /dashboard
-7. User can logout via header button → Redirect to /auth/login
+1. User visits signup page and creates account
+2. Password is hashed with bcrypt and stored in database
+3. User logs in with email/password
+4. NextAuth validates credentials against database
+5. If valid → Create session and redirect to /dashboard
+6. User can logout via header button → Redirect to /auth/login
+7. Optional: Password reset via email verification
 8. Session persists across page refreshes
 ```
 
@@ -62,66 +78,61 @@ All routes except `/auth/*` are protected:
 
 ## How It Works
 
-### 1. Proxy/Middleware Pattern (proxy.ts)
+### 1. Database Integration (Prisma)
 
-Runs on every request to intercept and check authentication:
+Users are stored in SQLite/PostgreSQL database:
 
 ```typescript
-// If user is NOT authenticated
-if (!req.auth) {
-  return Response.redirect(new URL("/auth/login", req.nextUrl));
-}
-
-// If user IS authenticated but on auth page
-if (pathname.startsWith("/auth/") && req.auth) {
-  return Response.redirect(new URL("/dashboard", req.nextUrl));
+// prisma/schema.prisma
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?   // Hashed with bcrypt
+  accounts      Account[]
+  sessions      Session[]
 }
 ```
 
-### 2. Session Provider (app/providers.tsx)
+### 2. Signup Process (app/api/signup/route.ts)
 
-Wraps the entire app to provide session context to client components:
+Creates new user with hashed password:
 
 ```typescript
-<SessionProvider>
-  {children}
-</SessionProvider>
+const hashedPassword = await bcrypt.hash(password, 12);
+const user = await prisma.user.create({
+  data: { name, email, password: hashedPassword },
+});
 ```
 
 ### 3. Credentials Provider (lib/auth.ts)
 
-Validates username/password against test user database:
+Validates login against database:
 
 ```typescript
-const testUsers = [
-  {
-    id: "1",
-    email: "test@gmail.com",
-    password: "test123",
-    name: "Test User",
-    role: "Project Manager",
-  },
-];
+async authorize(credentials) {
+  const user = await prisma.user.findUnique({
+    where: { email: credentials.email },
+  });
+
+  if (user && await bcrypt.compare(credentials.password, user.password)) {
+    return { id: user.id, email: user.email, name: user.name };
+  }
+  return null;
+}
 ```
 
-### 4. Login Flow (app/auth/login/page.tsx)
+### 4. Email Provider (Optional)
 
-Uses `signIn()` from NextAuth:
-
-```typescript
-const result = await signIn('credentials', {
-  email: formData.email,
-  password: formData.password,
-  redirect: false,
-});
-```
-
-### 5. Logout (components/header.tsx)
-
-Uses `signOut()` from NextAuth:
+For password reset functionality:
 
 ```typescript
-onClick={() => signOut({ redirect: true, redirectUrl: '/auth/login' })}
+EmailProvider({
+  server: process.env.EMAIL_SERVER,
+  from: process.env.EMAIL_FROM,
+})
 ```
 
 ## Session Management
@@ -134,96 +145,69 @@ Sessions are stored by NextAuth and validated on every request through the proxy
 
 ## For Production
 
-### Add Database User Storage
+### Database Migration
 
-Replace the in-memory `testUsers` array with:
+Switch to PostgreSQL for production:
 
-```typescript
-// lib/auth.ts
-async authorize(credentials) {
-  // Query your database instead of hardcoded array
-  const user = await db.user.findUnique({
-    where: { email: credentials.email }
-  });
+```bash
+# Update .env.local
+DATABASE_URL="postgresql://username:password@localhost:5432/loopbuild"
 
-  // Compare hashed password with bcrypt
-  const passwordMatch = await bcrypt.compare(
-    credentials.password,
-    user.passwordHash
-  );
-}
+# Run migration
+npx prisma migrate deploy
 ```
 
-### Add Email Provider
+### Email Configuration
 
-```typescript
-import EmailProvider from "next-auth/providers/email";
+Configure email service for password reset:
 
-providers: [
-  EmailProvider({
-    server: {
-      host: process.env.EMAIL_SERVER_HOST,
-      port: process.env.EMAIL_SERVER_PORT,
-      auth: { ... }
-    },
-    from: process.env.EMAIL_FROM,
-  }),
-]
+```bash
+# Gmail example
+EMAIL_SERVER_HOST=smtp.gmail.com
+EMAIL_SERVER_PORT=587
+EMAIL_SERVER_USER=your-email@gmail.com
+EMAIL_SERVER_PASS=your-app-password
+EMAIL_FROM=noreply@yourdomain.com
 ```
 
-### Add Password Reset
+### Security Enhancements
 
-Implement password reset flow:
-1. User clicks "Forgot Password"
-2. NextAuth sends reset token via email
-3. User resets password in secure link
-4. Password hash updated in database
+- Add rate limiting for login attempts
+- Implement account lockout after failed attempts
+- Add CSRF protection
+- Configure proper session settings
+- Use HTTPS in production
 
-### Environment Variables for Production
+### Environment Variables
 
 ```bash
 NEXTAUTH_URL=https://your-domain.com
-NEXTAUTH_SECRET=your-random-secret-key
-DATABASE_URL=your-database-url
-EMAIL_SERVER_HOST=your-email-service
-EMAIL_SERVER_PORT=your-port
-EMAIL_FROM=noreply@your-domain.com
+NEXTAUTH_SECRET=generate-a-secure-random-key
+DATABASE_URL=your-production-database-url
 ```
 
 ## Testing
 
-1. Navigate to `http://localhost:3000/auth/login`
-2. Enter credentials:
-   - Email: `test@gmail.com`
-   - Password: `test123`
-3. Click "Login"
-4. Should redirect to `/dashboard`
-5. Click logout button (top right) to test logout
-6. Should redirect back to login
+1. Navigate to `http://localhost:3000/auth/signup`
+2. Create a new account with email/password
+3. Navigate to `http://localhost:3000/auth/login`
+4. Login with the created credentials
+5. Should redirect to `/dashboard`
+6. Click logout button (top right) to test logout
+7. Should redirect back to login
 
-## Debugging
+## Database Commands
 
-Check NextAuth logs in console for debugging:
+```bash
+# Generate Prisma client
+npx prisma generate
 
-```typescript
-// Add to lib/auth.ts
-pages: {
-  signIn: "/auth/login",
-  error: "/auth/error",
-}
+# Create and apply migrations
+npx prisma migrate dev --name init
 
-// Check current session in any client component
-import { useSession } from "next-auth/react";
+# View database
+npx prisma studio
 
-export function MyComponent() {
-  const { data: session, status } = useSession();
-  console.log("Session:", session);
-  console.log("Status:", status); // loading | authenticated | unauthenticated
-}
+# Reset database
+npx prisma migrate reset
 ```
-
-## Useful Links
-
-- NextAuth Docs: https://next-auth.js.org
-- Credentials Provider: https://next-auth.js.org/providers/credentials
-- Session Management: https://next-auth.js.org/getting-started/example
