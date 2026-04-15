@@ -73,9 +73,9 @@ export function Sidebar({ activeNav = 'overview', onNavChange }: SidebarProps) {
       <Link href="/dashboard" className="p-4 sm:p-6 border-b border-sidebar-border hover:bg-sidebar-accent transition">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm sm:text-base">
-            L
+            C
           </div>
-          <h1 className="text-lg sm:text-xl font-bold text-sidebar-foreground">LoopBuild</h1>
+          <h1 className="text-lg sm:text-xl font-bold text-sidebar-foreground">Conzimer</h1>
         </div>
       </Link>
 

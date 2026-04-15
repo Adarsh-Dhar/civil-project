@@ -85,7 +85,7 @@ export default function OnboardingPage() {
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
               L
             </div>
-            <h1 className="text-2xl font-bold text-foreground">LoopBuild</h1>
+            <h1 className="text-2xl font-bold text-foreground">Conzimer</h1>
           </div>
           <p className="text-muted-foreground">Let's set up your account</p>
         </div>
@@ -106,7 +106,7 @@ export default function OnboardingPage() {
           {/* Step 1: Welcome */}
           {step === 1 && (
             <div>
-              <h2 className="text-2xl font-bold text-foreground mb-6">Welcome to LoopBuild</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-6">Welcome to Conzimer</h2>
               <div className="space-y-4 mb-8">
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0" />

@@ -64,7 +64,7 @@ export default function LoginPage() {
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
               L
             </div>
-            <h1 className="text-2xl font-bold text-foreground">LoopBuild</h1>
+            <h1 className="text-2xl font-bold text-foreground">Conzimer</h1>
           </div>
           <p className="text-muted-foreground">Construction Project Management</p>
         </div>

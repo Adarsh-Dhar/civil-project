@@ -82,7 +82,7 @@ export default function SignupPage() {
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
               L
             </div>
-            <h1 className="text-2xl font-bold text-foreground">LoopBuild</h1>
+            <h1 className="text-2xl font-bold text-foreground">Conzimer</h1>
           </div>
           <p className="text-muted-foreground">Construction Project Management</p>
         </div>
@@ -92,7 +92,7 @@ export default function SignupPage() {
           <div>
             <h2 className="text-2xl font-bold text-foreground mb-3">Create Your Account</h2>
             <p className="text-muted-foreground mb-4">
-              Join LoopBuild to manage your construction projects efficiently.
+              Join Conzimer to manage your construction projects efficiently.
             </p>
           </div>
 

@@ -1,8 +1,8 @@
-# NextAuth Authentication Setup - LoopBuild
+# NextAuth Authentication Setup - Conzimer
 
 ## Overview
 
-LoopBuild uses **NextAuth.js v4** with **Prisma database adapter** for secure email/password authentication. Users can sign up, log in, and reset passwords. All routes are protected with automatic redirection to login for unauthenticated users.
+Conzimer uses **NextAuth.js v4** with **Prisma database adapter** for secure email/password authentication. Users can sign up, log in, and reset passwords. All routes are protected with automatic redirection to login for unauthenticated users.
 
 ## Database Setup
 
@@ -151,7 +151,7 @@ Switch to PostgreSQL for production:
 
 ```bash
 # Update .env.local
-DATABASE_URL="postgresql://username:password@localhost:5432/loopbuild"
+DATABASE_URL="postgresql://username:password@localhost:5432/Conzimer"
 
 # Run migration
 npx prisma migrate deploy

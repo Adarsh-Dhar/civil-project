@@ -1,6 +1,6 @@
-# LoopBuild Civil Project Platform
+# Conzimer Civil Project Platform
 
-LoopBuild is a Next.js application for civil and construction project operations, centered around project tracking, RACI-driven task execution, weighted progress analytics, compliance tracking, and proof/audit traceability.
+Conzimer is a Next.js application for civil and construction project operations, centered around project tracking, RACI-driven task execution, weighted progress analytics, compliance tracking, and proof/audit traceability.
 
 This README documents the app end-to-end based on the current implementation in this repository.
 
