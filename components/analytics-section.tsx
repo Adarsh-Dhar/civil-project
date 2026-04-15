@@ -1,45 +1,87 @@
 'use client';
 
+import { useEffect, useMemo, useState } from 'react';
 import { BarChart, Bar, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
-const taskData = [
-  { name: 'Jan', completed: 85, total: 100 },
-  { name: 'Feb', completed: 88, total: 100 },
-  { name: 'Mar', completed: 92, total: 100 },
-  { name: 'Apr', completed: 78, total: 100 },
-  { name: 'May', completed: 95, total: 100 },
-  { name: 'Jun', completed: 87, total: 100 },
-];
+type StageCompletion = {
+  stage: string;
+  completed: number;
+  total: number;
+  completionPercent: number;
+};
 
-const timelineData = [
-  { week: 'Week 1', planned: 20, actual: 18 },
-  { week: 'Week 2', planned: 40, actual: 38 },
-  { week: 'Week 3', planned: 60, actual: 62 },
-  { week: 'Week 4', planned: 80, actual: 75 },
-  { week: 'Week 5', planned: 100, actual: 92 },
-];
+type TimelinePoint = {
+  period: string;
+  planned: number;
+  actual: number;
+};
 
 export function AnalyticsSection() {
+  const [stageData, setStageData] = useState<StageCompletion[]>([]);
+  const [timelineData, setTimelineData] = useState<TimelinePoint[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        const response = await fetch('/api/dashboard/analytics');
+        if (!response.ok) return;
+
+        const data = await response.json();
+        setStageData(data.stageCompletion ?? []);
+        setTimelineData(data.timeline ?? []);
+      } catch (error) {
+        console.error('Failed to fetch dashboard analytics:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAnalytics();
+  }, []);
+
+  const taskCompletionPercent = useMemo(() => {
+    if (stageData.length === 0) return 0;
+    const totals = stageData.reduce(
+      (acc, row) => {
+        acc.completed += row.completed;
+        acc.total += row.total;
+        return acc;
+      },
+      { completed: 0, total: 0 }
+    );
+    return totals.total > 0 ? Math.round((totals.completed / totals.total) * 100) : 0;
+  }, [stageData]);
+
+  const timelineProgress = useMemo(() => {
+    if (timelineData.length === 0) return 0;
+    return timelineData[timelineData.length - 1]?.actual ?? 0;
+  }, [timelineData]);
+
+  if (loading) {
+    return <div>Loading analytics...</div>;
+  }
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
       {/* Task Completion Rate */}
-      <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-gray-200 shadow-sm">
+      <div className="bg-card rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-border shadow-sm">
         <div className="flex items-center justify-between mb-4 sm:mb-6 gap-2">
-          <h2 className="text-base sm:text-lg font-semibold text-gray-900 truncate">Task Completion Rate</h2>
+          <h2 className="text-base sm:text-lg font-semibold text-foreground truncate">Task Completion Rate</h2>
           <div className="flex items-center gap-1">
-            <span className="text-xl sm:text-2xl font-bold text-indigo-600">87%</span>
+            <span className="text-xl sm:text-2xl font-bold text-indigo-600">{taskCompletionPercent}%</span>
           </div>
         </div>
 
         <ResponsiveContainer width="100%" height={200}>
-          <BarChart data={taskData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis dataKey="name" stroke="#9ca3af" />
-            <YAxis stroke="#9ca3af" />
+          <BarChart data={stageData.map((row) => ({ name: row.stage, completed: row.completionPercent, total: 100 }))}>
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+            <XAxis dataKey="name" stroke="var(--muted-foreground)" />
+            <YAxis stroke="var(--muted-foreground)" />
             <Tooltip
               contentStyle={{
-                backgroundColor: '#fff',
-                border: '1px solid #e5e7eb',
+                backgroundColor: 'var(--card)',
+                border: '1px solid var(--border)',
                 borderRadius: '8px',
               }}
             />
@@ -49,11 +91,11 @@ export function AnalyticsSection() {
       </div>
 
       {/* Timeline Progress */}
-      <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-gray-200 shadow-sm">
+      <div className="bg-card rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-border shadow-sm">
         <div className="flex items-center justify-between mb-4 sm:mb-6 gap-2">
-          <h2 className="text-base sm:text-lg font-semibold text-gray-900 truncate">Timeline Progress</h2>
+          <h2 className="text-base sm:text-lg font-semibold text-foreground truncate">Timeline Progress</h2>
           <div className="flex items-center gap-1">
-            <span className="text-xl sm:text-2xl font-bold text-purple-600">92%</span>
+            <span className="text-xl sm:text-2xl font-bold text-purple-600">{timelineProgress}%</span>
           </div>
         </div>
 
@@ -69,13 +111,13 @@ export function AnalyticsSection() {
                 <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis dataKey="week" stroke="#9ca3af" />
-            <YAxis stroke="#9ca3af" />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+            <XAxis dataKey="period" stroke="var(--muted-foreground)" />
+            <YAxis stroke="var(--muted-foreground)" />
             <Tooltip
               contentStyle={{
-                backgroundColor: '#fff',
-                border: '1px solid #e5e7eb',
+                backgroundColor: 'var(--card)',
+                border: '1px solid var(--border)',
                 borderRadius: '8px',
               }}
             />

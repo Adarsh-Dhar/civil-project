@@ -5,7 +5,7 @@ import prisma from '@/lib/prisma';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { projectId: string } }
+  { params }: { params: Promise<{ projectId: string }> }
 ) {
   try {
     const session = await getServerSession(authConfig) as any;
@@ -14,7 +14,11 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { projectId } = params;
+    const { projectId } = await params;
+
+    if (!projectId || projectId === 'undefined') {
+      return NextResponse.json({ error: 'Invalid project id' }, { status: 400 });
+    }
 
     const project = await prisma.project.findUnique({
       where: { id: projectId },
@@ -30,6 +34,13 @@ export async function GET(
           include: { uploader: { select: { name: true } } },
           orderBy: { uploadedAt: 'desc' },
         },
+        taskProofs: {
+          include: {
+            uploader: { select: { name: true } },
+            task: { select: { id: true, sequence: true, name: true } },
+          },
+          orderBy: { uploadedAt: 'desc' },
+        },
         compliance: true,
         auditLogs: {
           include: { user: { select: { name: true } } },
@@ -38,20 +49,18 @@ export async function GET(
         raciEntries: {
           include: { user: { select: { name: true } } },
         },
-        _count: { select: { proofs: true, compliance: true, auditLogs: true } },
+        tasks: {
+          include: {
+            _count: { select: { proofs: true } },
+          },
+          orderBy: { sequence: 'asc' },
+        },
+        _count: { select: { proofs: true, taskProofs: true, compliance: true, auditLogs: true, tasks: true } },
       },
     });
 
     if (!project) {
       return NextResponse.json({ error: 'Project not found' }, { status: 404 });
-    }
-
-    // Check if user has access (owner or team member)
-    const hasAccess = project.ownerId === session.user.id ||
-      project.team?.members.some((member: any) => member.id === session.user.id);
-
-    if (!hasAccess) {
-      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
     return NextResponse.json({ project });

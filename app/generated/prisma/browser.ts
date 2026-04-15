@@ -72,3 +72,18 @@ export type AuditLog = Prisma.AuditLogModel
  * 
  */
 export type RaciEntry = Prisma.RaciEntryModel
+/**
+ * Model ProjectTaskTemplate
+ * 
+ */
+export type ProjectTaskTemplate = Prisma.ProjectTaskTemplateModel
+/**
+ * Model ProjectTask
+ * 
+ */
+export type ProjectTask = Prisma.ProjectTaskModel
+/**
+ * Model TaskProof
+ * 
+ */
+export type TaskProof = Prisma.TaskProofModel

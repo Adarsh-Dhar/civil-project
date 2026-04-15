@@ -1,176 +1,172 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Download, RefreshCw } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { RACITable } from '@/components/raci-table';
 
-const TEAM_MEMBERS = ['Alice Morgan', 'Bob Collins', 'Charlie Davis', 'Engineer A'];
-const FUNCTIONS = [
-  'Site Preparation',
-  'Excavation',
-  'Foundation Pouring',
-  'Structural Steel',
-  'Electrical Wiring',
-  'Plumbing',
-  'HVAC',
-];
-
-// RACI Matrix data
-const RACI_MATRIX: Record<string, Record<string, string>> = {
-  'Site Preparation': {
-    'Alice Morgan': 'A',
-    'Bob Collins': 'R',
-    'Charlie Davis': 'C',
-    'Engineer A': 'I',
-  },
-  'Excavation': {
-    'Alice Morgan': 'A',
-    'Bob Collins': '',
-    'Charlie Davis': 'R',
-    'Engineer A': 'C',
-  },
-  'Foundation Pouring': {
-    'Alice Morgan': 'A',
-    'Bob Collins': 'R',
-    'Charlie Davis': 'C',
-    'Engineer A': 'R',
-  },
-  'Structural Steel': {
-    'Alice Morgan': 'A',
-    'Bob Collins': 'C',
-    'Charlie Davis': '',
-    'Engineer A': 'R',
-  },
-  'Electrical Wiring': {
-    'Alice Morgan': 'A',
-    'Bob Collins': '',
-    'Charlie Davis': 'R',
-    'Engineer A': 'C',
-  },
-  'Plumbing': {
-    'Alice Morgan': 'A',
-    'Bob Collins': 'R',
-    'Charlie Davis': 'I',
-    'Engineer A': 'C',
-  },
-  'HVAC': {
-    'Alice Morgan': 'A',
-    'Bob Collins': 'C',
-    'Charlie Davis': 'R',
-    'Engineer A': 'I',
-  },
+type ProjectTask = {
+  id: string;
+  status: 'pending' | 'in_progress' | 'blocked' | 'done';
+  costWeight: number;
+  timeWeight: number;
 };
 
-const getRACIColor = (role: string) => {
-  switch (role) {
-    case 'R':
-      return 'bg-blue-50 border border-blue-200';
-    case 'A':
-      return 'bg-purple-50 border border-purple-200';
-    case 'C':
-      return 'bg-amber-50 border border-amber-200';
-    case 'I':
-      return 'bg-emerald-50 border border-emerald-200';
-    default:
-      return 'bg-gray-50 border border-gray-200';
-  }
-};
+const ALPHA = 0.4;
+const BETA = 0.6;
 
-const getRACITextColor = (role: string) => {
-  switch (role) {
-    case 'R':
-      return 'text-blue-700 font-semibold';
-    case 'A':
-      return 'text-purple-700 font-semibold';
-    case 'C':
-      return 'text-amber-700 font-semibold';
-    case 'I':
-      return 'text-emerald-700 font-semibold';
-    default:
-      return 'text-gray-400';
-  }
-};
+const asPercent = (value: number) => `${(value * 100).toFixed(1)}%`;
 
-export default function RACIPage({ params }: { params: { projectId: string } }) {
+export default function RACIPage() {
+  const params = useParams<{ projectId?: string | string[] }>();
+  const projectId = useMemo(() => {
+    const raw = params?.projectId;
+    return Array.isArray(raw) ? raw[0] : raw;
+  }, [params]);
+
+  const [tasks, setTasks] = useState<ProjectTask[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (!projectId) {
+      setError('Invalid project id.');
+      setLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+
+    const loadTasks = async () => {
+      try {
+        setError('');
+        const response = await fetch(`/api/projects/${projectId}/tasks`);
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          if (!cancelled) {
+            setError(errorData?.error || 'Failed to load RACI tasks.');
+          }
+          return;
+        }
+
+        const data = await response.json();
+        if (!cancelled) {
+          setTasks(Array.isArray(data?.tasks) ? data.tasks : []);
+        }
+      } catch (loadError) {
+        console.error('Failed to load RACI tasks:', loadError);
+        if (!cancelled) {
+          setError('Failed to load RACI tasks.');
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadTasks();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [projectId]);
+
+  const doneTasks = tasks.filter((task) => task.status === 'done').length;
+
+  const totalCostDone = tasks
+    .filter((task) => task.status === 'done')
+    .reduce((sum, task) => sum + task.costWeight, 0);
+
+  const totalTimeDone = tasks
+    .filter((task) => task.status === 'done')
+    .reduce((sum, task) => sum + task.timeWeight, 0);
+
+  const overallProgress = ALPHA * totalCostDone + BETA * totalTimeDone;
+
+  const progressLabel = asPercent(overallProgress);
+
   return (
     <div className="p-4 sm:p-6 lg:p-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">RACI Matrix</h2>
-          <p className="text-xs sm:text-sm text-gray-600 mt-1">Responsibility assignment matrix</p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" className="rounded-lg px-3 py-2 sm:px-4 sm:py-2 flex items-center gap-2 text-xs sm:text-sm bg-transparent">
-            <Download className="w-4 h-4" />
-            <span className="hidden sm:inline">Export</span>
-          </Button>
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground">RACI Progress Narrative</h2>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">Live weighted progress using cost and time completion</p>
         </div>
       </div>
 
-      {/* Legend */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-        <div className="flex items-center gap-2 text-xs sm:text-sm">
-          <div className="w-4 h-4 bg-blue-50 border border-blue-200 rounded"></div>
-          <span className="text-gray-700"><span className="font-semibold text-blue-700">R</span> = Responsible</span>
+      {/* Narrative Section */}
+      <div className="mb-6 grid gap-4">
+        <div className="rounded-2xl border border-border bg-card p-4 sm:p-6">
+          <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-2">Core Idea</h3>
+          <p className="text-sm text-muted-foreground">
+            Think of this as a checklist. Every completed task adds two contributions: cost progress and time progress.
+            Final progress is the weighted mix of both.
+          </p>
         </div>
-        <div className="flex items-center gap-2 text-xs sm:text-sm">
-          <div className="w-4 h-4 bg-purple-50 border border-purple-200 rounded"></div>
-          <span className="text-gray-700"><span className="font-semibold text-purple-700">A</span> = Accountable</span>
+
+        <div className="rounded-2xl border border-border bg-card p-4 sm:p-6">
+          <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-4">How Progress Builds</h3>
+          <div className="space-y-4 text-sm text-muted-foreground">
+            <p>
+              <span className="font-semibold text-foreground">Step 1:</span> At project start, no task is completed so cost progress and time progress are both 0%.
+            </p>
+            <p>
+              <span className="font-semibold text-foreground">Step 2:</span> Every completed task adds its own cost weight and time weight into cumulative totals.
+            </p>
+            <p>
+              <span className="font-semibold text-foreground">Step 3:</span> The cumulative cost and time contributions are combined with alpha and beta weights.
+            </p>
+          </div>
         </div>
-        <div className="flex items-center gap-2 text-xs sm:text-sm">
-          <div className="w-4 h-4 bg-amber-50 border border-amber-200 rounded"></div>
-          <span className="text-gray-700"><span className="font-semibold text-amber-700">C</span> = Consulted</span>
-        </div>
-        <div className="flex items-center gap-2 text-xs sm:text-sm">
-          <div className="w-4 h-4 bg-emerald-50 border border-emerald-200 rounded"></div>
-          <span className="text-gray-700"><span className="font-semibold text-emerald-700">I</span> = Informed</span>
+
+        <div className="rounded-2xl border border-border bg-gradient-to-r from-indigo-500/10 to-blue-500/10 p-4 sm:p-6">
+          <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-3">Live Formula Snapshot</h3>
+          {loading ? (
+            <p className="text-sm text-muted-foreground">Calculating from project tasks...</p>
+          ) : error ? (
+            <p className="text-sm text-destructive">{error}</p>
+          ) : (
+            <>
+              <p className="text-sm text-muted-foreground mb-3">
+                Progress = α × (Total Cost Weight Completed) + β × (Total Time Weight Completed)
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
+                <div className="rounded-xl border border-border bg-background p-3">
+                  <p className="text-muted-foreground text-xs">Alpha (cost)</p>
+                  <p className="font-semibold text-foreground">{ALPHA.toFixed(1)}</p>
+                </div>
+                <div className="rounded-xl border border-border bg-background p-3">
+                  <p className="text-muted-foreground text-xs">Beta (time)</p>
+                  <p className="font-semibold text-foreground">{BETA.toFixed(1)}</p>
+                </div>
+                <div className="rounded-xl border border-border bg-background p-3">
+                  <p className="text-muted-foreground text-xs">Cost Completed</p>
+                  <p className="font-semibold text-foreground">{asPercent(totalCostDone)}</p>
+                </div>
+                <div className="rounded-xl border border-border bg-background p-3">
+                  <p className="text-muted-foreground text-xs">Time Completed</p>
+                  <p className="font-semibold text-foreground">{asPercent(totalTimeDone)}</p>
+                </div>
+              </div>
+              <div className="mt-4 rounded-xl border border-indigo-200 bg-indigo-50 p-3 text-indigo-900 text-sm">
+                <span className="font-semibold">Current Progress:</span>{' '}
+                {`0.4 × ${totalCostDone.toFixed(3)} + 0.6 × ${totalTimeDone.toFixed(3)} = ${overallProgress.toFixed(3)} (${progressLabel})`}
+              </div>
+              <p className="mt-3 text-xs text-muted-foreground">
+                Tasks completed: {doneTasks} of {tasks.length}
+              </p>
+            </>
+          )}
         </div>
       </div>
 
-      {/* Matrix Table */}
-      <div className="bg-white rounded-xl sm:rounded-2xl border border-gray-200 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-900 sticky left-0 bg-gray-50 z-10">Function</th>
-                {TEAM_MEMBERS.map((member) => (
-                  <th key={member} className="px-2 sm:px-4 py-3 sm:py-4 text-center text-xs font-semibold text-gray-900 whitespace-nowrap">
-                    <span className="text-[10px] sm:text-xs">{member.split(' ')[0]}</span>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {FUNCTIONS.map((func) => (
-                <tr key={func} className="hover:bg-gray-50 transition">
-                  <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 hover:bg-gray-50">
-                    {func}
-                  </td>
-                  {TEAM_MEMBERS.map((member) => {
-                    const role = RACI_MATRIX[func][member];
-                    return (
-                      <td key={`${func}-${member}`} className="px-2 sm:px-4 py-3 sm:py-4 text-center">
-                        <div className={`inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded ${getRACIColor(role)}`}>
-                          <span className={`text-xs sm:text-sm ${getRACITextColor(role)}`}>
-                            {role || '-'}
-                          </span>
-                        </div>
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Summary */}
-      <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <p className="text-xs sm:text-sm text-blue-900">
-          <span className="font-semibold">Tip:</span> Use this matrix to clearly define roles and responsibilities. Each task should have exactly one person Responsible (R) and one person Accountable (A).
+      <div className="rounded-2xl border border-border bg-card p-4 sm:p-6">
+        <h3 className="text-lg font-semibold text-foreground mb-3">Live Task Matrix</h3>
+        <p className="text-xs sm:text-sm text-muted-foreground mb-4">
+          This table is connected to project tasks. Updating task status changes the weighted progress values above.
         </p>
+        {projectId ? <RACITable projectId={projectId} /> : <p className="text-sm text-muted-foreground">Invalid project context.</p>}
       </div>
     </div>
   );

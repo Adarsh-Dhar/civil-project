@@ -224,6 +224,7 @@ export type UserWhereInput = {
   sessions?: Prisma.SessionListRelationFilter
   ownedProjects?: Prisma.ProjectListRelationFilter
   proofs?: Prisma.ProofListRelationFilter
+  taskProofs?: Prisma.TaskProofListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   raciEntries?: Prisma.RaciEntryListRelationFilter
 }
@@ -245,6 +246,7 @@ export type UserOrderByWithRelationInput = {
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   ownedProjects?: Prisma.ProjectOrderByRelationAggregateInput
   proofs?: Prisma.ProofOrderByRelationAggregateInput
+  taskProofs?: Prisma.TaskProofOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   raciEntries?: Prisma.RaciEntryOrderByRelationAggregateInput
 }
@@ -269,6 +271,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   sessions?: Prisma.SessionListRelationFilter
   ownedProjects?: Prisma.ProjectListRelationFilter
   proofs?: Prisma.ProofListRelationFilter
+  taskProofs?: Prisma.TaskProofListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   raciEntries?: Prisma.RaciEntryListRelationFilter
 }, "id" | "email">
@@ -320,6 +323,7 @@ export type UserCreateInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   ownedProjects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput
   proofs?: Prisma.ProofCreateNestedManyWithoutUploaderInput
+  taskProofs?: Prisma.TaskProofCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   raciEntries?: Prisma.RaciEntryCreateNestedManyWithoutUserInput
 }
@@ -339,6 +343,7 @@ export type UserUncheckedCreateInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   ownedProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput
   proofs?: Prisma.ProofUncheckedCreateNestedManyWithoutUploaderInput
+  taskProofs?: Prisma.TaskProofUncheckedCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   raciEntries?: Prisma.RaciEntryUncheckedCreateNestedManyWithoutUserInput
 }
@@ -358,6 +363,7 @@ export type UserUpdateInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   ownedProjects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput
   proofs?: Prisma.ProofUpdateManyWithoutUploaderNestedInput
+  taskProofs?: Prisma.TaskProofUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   raciEntries?: Prisma.RaciEntryUpdateManyWithoutUserNestedInput
 }
@@ -377,6 +383,7 @@ export type UserUncheckedUpdateInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   ownedProjects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
   proofs?: Prisma.ProofUncheckedUpdateManyWithoutUploaderNestedInput
+  taskProofs?: Prisma.TaskProofUncheckedUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   raciEntries?: Prisma.RaciEntryUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -646,6 +653,20 @@ export type UserUpdateOneRequiredWithoutRaciEntriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRaciEntriesInput, Prisma.UserUpdateWithoutRaciEntriesInput>, Prisma.UserUncheckedUpdateWithoutRaciEntriesInput>
 }
 
+export type UserCreateNestedOneWithoutTaskProofsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTaskProofsInput, Prisma.UserUncheckedCreateWithoutTaskProofsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTaskProofsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutTaskProofsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTaskProofsInput, Prisma.UserUncheckedCreateWithoutTaskProofsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTaskProofsInput
+  upsert?: Prisma.UserUpsertWithoutTaskProofsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTaskProofsInput, Prisma.UserUpdateWithoutTaskProofsInput>, Prisma.UserUncheckedUpdateWithoutTaskProofsInput>
+}
+
 export type UserCreateWithoutAccountsInput = {
   id?: string
   name?: string | null
@@ -660,6 +681,7 @@ export type UserCreateWithoutAccountsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   ownedProjects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput
   proofs?: Prisma.ProofCreateNestedManyWithoutUploaderInput
+  taskProofs?: Prisma.TaskProofCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   raciEntries?: Prisma.RaciEntryCreateNestedManyWithoutUserInput
 }
@@ -678,6 +700,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   ownedProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput
   proofs?: Prisma.ProofUncheckedCreateNestedManyWithoutUploaderInput
+  taskProofs?: Prisma.TaskProofUncheckedCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   raciEntries?: Prisma.RaciEntryUncheckedCreateNestedManyWithoutUserInput
 }
@@ -712,6 +735,7 @@ export type UserUpdateWithoutAccountsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   ownedProjects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput
   proofs?: Prisma.ProofUpdateManyWithoutUploaderNestedInput
+  taskProofs?: Prisma.TaskProofUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   raciEntries?: Prisma.RaciEntryUpdateManyWithoutUserNestedInput
 }
@@ -730,6 +754,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   ownedProjects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
   proofs?: Prisma.ProofUncheckedUpdateManyWithoutUploaderNestedInput
+  taskProofs?: Prisma.TaskProofUncheckedUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   raciEntries?: Prisma.RaciEntryUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -748,6 +773,7 @@ export type UserCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   ownedProjects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput
   proofs?: Prisma.ProofCreateNestedManyWithoutUploaderInput
+  taskProofs?: Prisma.TaskProofCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   raciEntries?: Prisma.RaciEntryCreateNestedManyWithoutUserInput
 }
@@ -766,6 +792,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   ownedProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput
   proofs?: Prisma.ProofUncheckedCreateNestedManyWithoutUploaderInput
+  taskProofs?: Prisma.TaskProofUncheckedCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   raciEntries?: Prisma.RaciEntryUncheckedCreateNestedManyWithoutUserInput
 }
@@ -800,6 +827,7 @@ export type UserUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   ownedProjects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput
   proofs?: Prisma.ProofUpdateManyWithoutUploaderNestedInput
+  taskProofs?: Prisma.TaskProofUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   raciEntries?: Prisma.RaciEntryUpdateManyWithoutUserNestedInput
 }
@@ -818,6 +846,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   ownedProjects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
   proofs?: Prisma.ProofUncheckedUpdateManyWithoutUploaderNestedInput
+  taskProofs?: Prisma.TaskProofUncheckedUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   raciEntries?: Prisma.RaciEntryUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -836,6 +865,7 @@ export type UserCreateWithoutTeamInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   ownedProjects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput
   proofs?: Prisma.ProofCreateNestedManyWithoutUploaderInput
+  taskProofs?: Prisma.TaskProofCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   raciEntries?: Prisma.RaciEntryCreateNestedManyWithoutUserInput
 }
@@ -854,6 +884,7 @@ export type UserUncheckedCreateWithoutTeamInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   ownedProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput
   proofs?: Prisma.ProofUncheckedCreateNestedManyWithoutUploaderInput
+  taskProofs?: Prisma.TaskProofUncheckedCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   raciEntries?: Prisma.RaciEntryUncheckedCreateNestedManyWithoutUserInput
 }
@@ -914,6 +945,7 @@ export type UserCreateWithoutRoleInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   ownedProjects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput
   proofs?: Prisma.ProofCreateNestedManyWithoutUploaderInput
+  taskProofs?: Prisma.TaskProofCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   raciEntries?: Prisma.RaciEntryCreateNestedManyWithoutUserInput
 }
@@ -932,6 +964,7 @@ export type UserUncheckedCreateWithoutRoleInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   ownedProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput
   proofs?: Prisma.ProofUncheckedCreateNestedManyWithoutUploaderInput
+  taskProofs?: Prisma.TaskProofUncheckedCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   raciEntries?: Prisma.RaciEntryUncheckedCreateNestedManyWithoutUserInput
 }
@@ -976,6 +1009,7 @@ export type UserCreateWithoutOwnedProjectsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   proofs?: Prisma.ProofCreateNestedManyWithoutUploaderInput
+  taskProofs?: Prisma.TaskProofCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   raciEntries?: Prisma.RaciEntryCreateNestedManyWithoutUserInput
 }
@@ -994,6 +1028,7 @@ export type UserUncheckedCreateWithoutOwnedProjectsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   proofs?: Prisma.ProofUncheckedCreateNestedManyWithoutUploaderInput
+  taskProofs?: Prisma.TaskProofUncheckedCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   raciEntries?: Prisma.RaciEntryUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1028,6 +1063,7 @@ export type UserUpdateWithoutOwnedProjectsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   proofs?: Prisma.ProofUpdateManyWithoutUploaderNestedInput
+  taskProofs?: Prisma.TaskProofUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   raciEntries?: Prisma.RaciEntryUpdateManyWithoutUserNestedInput
 }
@@ -1046,6 +1082,7 @@ export type UserUncheckedUpdateWithoutOwnedProjectsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   proofs?: Prisma.ProofUncheckedUpdateManyWithoutUploaderNestedInput
+  taskProofs?: Prisma.TaskProofUncheckedUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   raciEntries?: Prisma.RaciEntryUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1064,6 +1101,7 @@ export type UserCreateWithoutProofsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   ownedProjects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput
+  taskProofs?: Prisma.TaskProofCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   raciEntries?: Prisma.RaciEntryCreateNestedManyWithoutUserInput
 }
@@ -1082,6 +1120,7 @@ export type UserUncheckedCreateWithoutProofsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   ownedProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput
+  taskProofs?: Prisma.TaskProofUncheckedCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   raciEntries?: Prisma.RaciEntryUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1116,6 +1155,7 @@ export type UserUpdateWithoutProofsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   ownedProjects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput
+  taskProofs?: Prisma.TaskProofUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   raciEntries?: Prisma.RaciEntryUpdateManyWithoutUserNestedInput
 }
@@ -1134,6 +1174,7 @@ export type UserUncheckedUpdateWithoutProofsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   ownedProjects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
+  taskProofs?: Prisma.TaskProofUncheckedUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   raciEntries?: Prisma.RaciEntryUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1153,6 +1194,7 @@ export type UserCreateWithoutAuditLogsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   ownedProjects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput
   proofs?: Prisma.ProofCreateNestedManyWithoutUploaderInput
+  taskProofs?: Prisma.TaskProofCreateNestedManyWithoutUploaderInput
   raciEntries?: Prisma.RaciEntryCreateNestedManyWithoutUserInput
 }
 
@@ -1171,6 +1213,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   ownedProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput
   proofs?: Prisma.ProofUncheckedCreateNestedManyWithoutUploaderInput
+  taskProofs?: Prisma.TaskProofUncheckedCreateNestedManyWithoutUploaderInput
   raciEntries?: Prisma.RaciEntryUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -1205,6 +1248,7 @@ export type UserUpdateWithoutAuditLogsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   ownedProjects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput
   proofs?: Prisma.ProofUpdateManyWithoutUploaderNestedInput
+  taskProofs?: Prisma.TaskProofUpdateManyWithoutUploaderNestedInput
   raciEntries?: Prisma.RaciEntryUpdateManyWithoutUserNestedInput
 }
 
@@ -1223,6 +1267,7 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   ownedProjects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
   proofs?: Prisma.ProofUncheckedUpdateManyWithoutUploaderNestedInput
+  taskProofs?: Prisma.TaskProofUncheckedUpdateManyWithoutUploaderNestedInput
   raciEntries?: Prisma.RaciEntryUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1241,6 +1286,7 @@ export type UserCreateWithoutRaciEntriesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   ownedProjects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput
   proofs?: Prisma.ProofCreateNestedManyWithoutUploaderInput
+  taskProofs?: Prisma.TaskProofCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
 }
 
@@ -1259,6 +1305,7 @@ export type UserUncheckedCreateWithoutRaciEntriesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   ownedProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput
   proofs?: Prisma.ProofUncheckedCreateNestedManyWithoutUploaderInput
+  taskProofs?: Prisma.TaskProofUncheckedCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -1293,6 +1340,7 @@ export type UserUpdateWithoutRaciEntriesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   ownedProjects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput
   proofs?: Prisma.ProofUpdateManyWithoutUploaderNestedInput
+  taskProofs?: Prisma.TaskProofUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
 }
 
@@ -1311,7 +1359,100 @@ export type UserUncheckedUpdateWithoutRaciEntriesInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   ownedProjects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
   proofs?: Prisma.ProofUncheckedUpdateManyWithoutUploaderNestedInput
+  taskProofs?: Prisma.TaskProofUncheckedUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutTaskProofsInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  password?: string | null
+  onboardingCompleted?: boolean
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  role?: Prisma.RoleCreateNestedOneWithoutUsersInput
+  team?: Prisma.TeamCreateNestedOneWithoutMembersInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  ownedProjects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput
+  proofs?: Prisma.ProofCreateNestedManyWithoutUploaderInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  raciEntries?: Prisma.RaciEntryCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutTaskProofsInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  password?: string | null
+  roleId?: string | null
+  teamId?: string | null
+  onboardingCompleted?: boolean
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  ownedProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput
+  proofs?: Prisma.ProofUncheckedCreateNestedManyWithoutUploaderInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  raciEntries?: Prisma.RaciEntryUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutTaskProofsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutTaskProofsInput, Prisma.UserUncheckedCreateWithoutTaskProofsInput>
+}
+
+export type UserUpsertWithoutTaskProofsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTaskProofsInput, Prisma.UserUncheckedUpdateWithoutTaskProofsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTaskProofsInput, Prisma.UserUncheckedCreateWithoutTaskProofsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutTaskProofsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTaskProofsInput, Prisma.UserUncheckedUpdateWithoutTaskProofsInput>
+}
+
+export type UserUpdateWithoutTaskProofsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  role?: Prisma.RoleUpdateOneWithoutUsersNestedInput
+  team?: Prisma.TeamUpdateOneWithoutMembersNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  ownedProjects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput
+  proofs?: Prisma.ProofUpdateManyWithoutUploaderNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  raciEntries?: Prisma.RaciEntryUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutTaskProofsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  ownedProjects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
+  proofs?: Prisma.ProofUncheckedUpdateManyWithoutUploaderNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  raciEntries?: Prisma.RaciEntryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyTeamInput = {
@@ -1340,6 +1481,7 @@ export type UserUpdateWithoutTeamInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   ownedProjects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput
   proofs?: Prisma.ProofUpdateManyWithoutUploaderNestedInput
+  taskProofs?: Prisma.TaskProofUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   raciEntries?: Prisma.RaciEntryUpdateManyWithoutUserNestedInput
 }
@@ -1358,6 +1500,7 @@ export type UserUncheckedUpdateWithoutTeamInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   ownedProjects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
   proofs?: Prisma.ProofUncheckedUpdateManyWithoutUploaderNestedInput
+  taskProofs?: Prisma.TaskProofUncheckedUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   raciEntries?: Prisma.RaciEntryUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1400,6 +1543,7 @@ export type UserUpdateWithoutRoleInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   ownedProjects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput
   proofs?: Prisma.ProofUpdateManyWithoutUploaderNestedInput
+  taskProofs?: Prisma.TaskProofUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   raciEntries?: Prisma.RaciEntryUpdateManyWithoutUserNestedInput
 }
@@ -1418,6 +1562,7 @@ export type UserUncheckedUpdateWithoutRoleInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   ownedProjects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
   proofs?: Prisma.ProofUncheckedUpdateManyWithoutUploaderNestedInput
+  taskProofs?: Prisma.TaskProofUncheckedUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   raciEntries?: Prisma.RaciEntryUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1444,6 +1589,7 @@ export type UserCountOutputType = {
   sessions: number
   ownedProjects: number
   proofs: number
+  taskProofs: number
   auditLogs: number
   raciEntries: number
 }
@@ -1453,6 +1599,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   ownedProjects?: boolean | UserCountOutputTypeCountOwnedProjectsArgs
   proofs?: boolean | UserCountOutputTypeCountProofsArgs
+  taskProofs?: boolean | UserCountOutputTypeCountTaskProofsArgs
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
   raciEntries?: boolean | UserCountOutputTypeCountRaciEntriesArgs
 }
@@ -1498,6 +1645,13 @@ export type UserCountOutputTypeCountProofsArgs<ExtArgs extends runtime.Types.Ext
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountTaskProofsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TaskProofWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AuditLogWhereInput
 }
@@ -1527,6 +1681,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   ownedProjects?: boolean | Prisma.User$ownedProjectsArgs<ExtArgs>
   proofs?: boolean | Prisma.User$proofsArgs<ExtArgs>
+  taskProofs?: boolean | Prisma.User$taskProofsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   raciEntries?: boolean | Prisma.User$raciEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1583,6 +1738,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   ownedProjects?: boolean | Prisma.User$ownedProjectsArgs<ExtArgs>
   proofs?: boolean | Prisma.User$proofsArgs<ExtArgs>
+  taskProofs?: boolean | Prisma.User$taskProofsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   raciEntries?: boolean | Prisma.User$raciEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1605,6 +1761,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     ownedProjects: Prisma.$ProjectPayload<ExtArgs>[]
     proofs: Prisma.$ProofPayload<ExtArgs>[]
+    taskProofs: Prisma.$TaskProofPayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     raciEntries: Prisma.$RaciEntryPayload<ExtArgs>[]
   }
@@ -2019,6 +2176,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ownedProjects<T extends Prisma.User$ownedProjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ownedProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   proofs<T extends Prisma.User$proofsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$proofsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProofPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  taskProofs<T extends Prisma.User$taskProofsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$taskProofsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskProofPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   raciEntries<T extends Prisma.User$raciEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$raciEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RaciEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -2592,6 +2750,30 @@ export type User$proofsArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.ProofScalarFieldEnum | Prisma.ProofScalarFieldEnum[]
+}
+
+/**
+ * User.taskProofs
+ */
+export type User$taskProofsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TaskProof
+   */
+  select?: Prisma.TaskProofSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TaskProof
+   */
+  omit?: Prisma.TaskProofOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TaskProofInclude<ExtArgs> | null
+  where?: Prisma.TaskProofWhereInput
+  orderBy?: Prisma.TaskProofOrderByWithRelationInput | Prisma.TaskProofOrderByWithRelationInput[]
+  cursor?: Prisma.TaskProofWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TaskProofScalarFieldEnum | Prisma.TaskProofScalarFieldEnum[]
 }
 
 /**

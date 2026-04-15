@@ -1,15 +1,24 @@
 import React from "react"
 import { ProtectedLayout } from '@/app/layout-protected';
-import { AuthGuard } from '@/components/auth-guard';
+import { getServerSession } from "next-auth/next";
+import { authConfig } from "@/lib/auth";
+import { redirect } from 'next/navigation';
 
-export default function SettingsLayout({
+export const dynamic = 'force-dynamic';
+
+export default async function SettingsLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  // Server-side auth check - redirects before any client render
+    const session = await getServerSession(authConfig);
+  
+  if (!session?.user) {
+    redirect('/auth/login');
+  }
+
   return (
-    <AuthGuard>
-      <ProtectedLayout>{children}</ProtectedLayout>
-    </AuthGuard>
+    <ProtectedLayout>{children}</ProtectedLayout>
   );
 }

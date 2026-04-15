@@ -10,7 +10,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/auth/login');
+      router.replace('/auth/login');
     }
   }, [status, router]);
 
@@ -18,8 +18,12 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     return <div className="flex items-center justify-center h-screen">Loading...</div>;
   }
 
+  if (status === 'unauthenticated') {
+    return <div className="flex items-center justify-center h-screen">Redirecting...</div>;
+  }
+
   if (!session) {
-    return null;
+    return <div className="flex items-center justify-center h-screen">Loading...</div>;
   }
 
   return <>{children}</>;

@@ -1,62 +1,36 @@
-import NextAuth from "next-auth";
-import type { NextAuthConfig } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import EmailProvider from "next-auth/providers/email";
+import NextAuth, { type NextAuthOptions, getServerSession } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
-const authConfig = {
-  adapter: PrismaAdapter(prisma),
+export const authConfig: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
   pages: {
     signIn: "/auth/login",
-    signUp: "/auth/signup",
   },
   callbacks: {
-    authorized({ auth, request: { pathname } }) {
-      const isLoggedIn = !!auth?.user;
-      const isOnAuthPage =
-        pathname.startsWith("/auth/login") ||
-        pathname.startsWith("/auth/signup") ||
-        pathname.startsWith("/auth/onboarding");
-
-      // Redirect authenticated users away from login/signup to dashboard, but allow onboarding
-      if ((pathname.startsWith("/auth/login") || pathname.startsWith("/auth/signup")) && isLoggedIn) {
-        return Response.redirect(new URL('/auth/onboarding', request.url));
-      }
-
-      // Allow access to auth pages for unauthenticated users
-      if (isOnAuthPage) {
-        return true;
-      }
-
-      // Require authentication for all other routes
-      return isLoggedIn;
-    },
     async jwt({ token, user }) {
       if (user) {
-        token.role = user.role;
         token.id = user.id;
+        token.role = (user as any).role;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string;
+        (session.user as any).id = token.id as string;
+        session.user.email = token.email as string;
         (session.user as any).role = token.role;
       }
       return session;
     },
-    async redirect({ url, baseUrl }) {
-      // Allows relative callback URLs
-      if (url.startsWith("/")) return `${baseUrl}${url}`;
-      // Allows callback URLs on the same origin
-      else if (new URL(url).origin === baseUrl) return url;
-      return baseUrl;
-    },
   },
   providers: [
-    Credentials({
+    CredentialsProvider({
+      name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
@@ -68,7 +42,12 @@ const authConfig = {
 
         try {
           const user = await prisma.user.findUnique({
-            where: { email: credentials.email as string },
+            where: { email: credentials.email },
+            include: {
+              role: {
+                select: { name: true },
+              },
+            },
           });
 
           if (!user || !user.password) {
@@ -76,7 +55,7 @@ const authConfig = {
           }
 
           const isPasswordValid = await bcrypt.compare(
-            credentials.password as string,
+            credentials.password,
             user.password
           );
 
@@ -88,6 +67,8 @@ const authConfig = {
             id: user.id,
             email: user.email,
             name: user.name,
+            role: user.role?.name ?? 'Member',
+            image: user.image,
           };
         } catch (error) {
           console.error("Auth error:", error);
@@ -95,21 +76,11 @@ const authConfig = {
         }
       },
     }),
-    EmailProvider({
-      server: {
-        host: process.env.EMAIL_SERVER_HOST,
-        port: parseInt(process.env.EMAIL_SERVER_PORT || '587'),
-        auth: {
-          user: process.env.EMAIL_SERVER_USER,
-          pass: process.env.EMAIL_SERVER_PASS,
-        },
-      },
-      from: process.env.EMAIL_FROM,
-    }),
   ],
-} satisfies NextAuthConfig;
+};
 
-export { authConfig };
+export const handler = NextAuth(authConfig);
 
-const authResult = NextAuth(authConfig);
-export const { auth, handlers, signIn, signOut } = authResult;
+export async function auth() {
+  return getServerSession(authConfig);
+}

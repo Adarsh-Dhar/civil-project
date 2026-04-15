@@ -16,9 +16,9 @@ export function SummaryCard({ title, value, trend, unit }: SummaryCardProps) {
   const sparklineData = [2, 4, 3, 8, 5, 9, 4, 7, 6, 8, 5];
   
   return (
-    <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-card rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between mb-4 gap-2">
-        <h3 className="text-gray-600 font-medium text-xs sm:text-sm truncate">{title}</h3>
+        <h3 className="text-muted-foreground font-medium text-xs sm:text-sm truncate">{title}</h3>
         {trend !== undefined && (
           <div className={`flex items-center gap-1 text-xs sm:text-sm font-medium flex-shrink-0 ${trend >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
             {trend >= 0 ? <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" /> : <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4" />}
@@ -28,8 +28,8 @@ export function SummaryCard({ title, value, trend, unit }: SummaryCardProps) {
       </div>
 
       <div className="mb-4">
-        <div className="text-2xl sm:text-3xl font-bold text-gray-900">{value}</div>
-        {unit && <p className="text-xs text-gray-500 mt-1">{unit}</p>}
+        <div className="text-2xl sm:text-3xl font-bold text-foreground">{value}</div>
+        {unit && <p className="text-xs text-muted-foreground mt-1">{unit}</p>}
       </div>
 
       {/* Mini Sparkline */}

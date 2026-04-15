@@ -41,25 +41,25 @@ export default function ReportsPage() {
     <div className="p-4 sm:p-6 lg:p-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Reports & Exports</h1>
-        <p className="text-gray-600 text-sm mt-2">Generate and download project reports</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Reports & Exports</h1>
+        <p className="text-muted-foreground text-sm mt-2">Generate and download project reports</p>
       </div>
 
       {/* Date Range Filter */}
-      <div className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-6 border border-gray-200 mb-6">
-        <h3 className="text-base font-semibold text-gray-900 mb-4">Report Filters</h3>
+      <div className="bg-card rounded-lg sm:rounded-xl p-4 sm:p-6 border border-border mb-6">
+        <h3 className="text-base font-semibold text-foreground mb-4">Report Filters</h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="block text-xs sm:text-sm font-medium text-gray-900 mb-2">Start Date</label>
-            <input type="date" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm text-gray-900 bg-white placeholder:text-gray-500" />
+            <label className="block text-xs sm:text-sm font-medium text-foreground mb-2">Start Date</label>
+            <input type="date" className="w-full px-3 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent outline-none text-sm text-foreground bg-background placeholder:text-muted-foreground" />
           </div>
           <div>
-            <label className="block text-xs sm:text-sm font-medium text-gray-900 mb-2">End Date</label>
-            <input type="date" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm text-gray-900 bg-white placeholder:text-gray-500" />
+            <label className="block text-xs sm:text-sm font-medium text-foreground mb-2">End Date</label>
+            <input type="date" className="w-full px-3 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent outline-none text-sm text-foreground bg-background placeholder:text-muted-foreground" />
           </div>
           <div>
-            <label className="block text-xs sm:text-sm font-medium text-gray-900 mb-2">Project</label>
-            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm text-gray-900 bg-white">
+            <label className="block text-xs sm:text-sm font-medium text-foreground mb-2">Project</label>
+            <select className="w-full px-3 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent outline-none text-sm text-foreground bg-background">
               <option>All Projects</option>
               <option>Skyline Tower</option>
               <option>Riverfront Villa</option>
@@ -73,19 +73,19 @@ export default function ReportsPage() {
         {REPORTS.map((report) => {
           const Icon = report.icon;
           return (
-            <Card key={report.id} className="p-4 sm:p-6 bg-white border border-gray-200 shadow-sm">
+            <Card key={report.id} className="p-4 sm:p-6 bg-card border border-border shadow-sm">
               <div className="flex items-start justify-between mb-4">
-                <div className="p-2 bg-indigo-50 rounded-lg">
+                <div className="p-2 bg-primary/10 rounded-lg">
                   <Icon className="w-6 h-6 text-indigo-600" />
                 </div>
               </div>
 
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">{report.title}</h3>
-              <p className="text-sm text-gray-600 mb-4">{report.description}</p>
+              <h3 className="text-lg font-semibold text-foreground mb-2">{report.title}</h3>
+              <p className="text-sm text-muted-foreground mb-4">{report.description}</p>
 
               <div className="flex flex-wrap gap-2 mb-4">
                 {report.formats.map((format) => (
-                  <span key={format} className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-medium">
+                  <span key={format} className="px-2 py-1 bg-secondary text-secondary-foreground rounded text-xs font-medium">
                     {format}
                   </span>
                 ))}

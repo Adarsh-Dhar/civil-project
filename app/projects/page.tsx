@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Search, Plus, Grid3x3, List, Filter, X } from 'lucide-react';
 
 interface Project {
@@ -69,20 +68,19 @@ export default function ProjectsPage() {
 
   const filteredProjects = projects.filter(p =>
     p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (p.description && p.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
-    p.location.toLowerCase().includes(searchQuery.toLowerCase())
+    (p.description && p.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'planning':
-        return 'bg-blue-50 text-blue-700 border-blue-200';
+        return 'bg-primary/10 text-primary border-primary/30';
       case 'active':
-        return 'bg-amber-50 text-amber-700 border-amber-200';
+        return 'bg-chart-5/20 text-chart-5 border-chart-5/35';
       case 'completed':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        return 'bg-accent/20 text-accent border-accent/35';
       default:
-        return 'bg-gray-50 text-gray-700 border-gray-200';
+        return 'bg-secondary text-secondary-foreground border-border';
     }
   };
 
@@ -99,45 +97,44 @@ export default function ProjectsPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8 gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Projects</h1>
-          <p className="text-gray-600 text-sm mt-1">Manage all your construction projects</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Projects</h1>
+          <p className="text-muted-foreground text-sm mt-1">Manage all your construction projects</p>
         </div>
-        <Button
-          onClick={() => setShowCreateModal(true)}
-          className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-lg px-4 py-2 flex items-center gap-2"
-        >
-          <Plus className="w-4 h-4" />
-          <span className="hidden sm:inline">New Project</span>
-        </Button>
+        <Link href="/projects/add">
+          <Button className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-lg px-4 py-2 flex items-center gap-2">
+            <Plus className="w-4 h-4" />
+            <span className="hidden sm:inline">New Project</span>
+          </Button>
+        </Link>
       </div>
 
       {/* Search & Filters */}
       <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6">
         <div className="flex-1 relative">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search projects..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition text-sm"
+            className="w-full pl-10 pr-4 py-2.5 border border-input bg-background rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent outline-none transition text-sm text-foreground"
           />
         </div>
         <div className="flex gap-2">
-          <button className="flex items-center gap-2 px-3 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm text-gray-700">
+          <button className="flex items-center gap-2 px-3 py-2.5 border border-border rounded-lg hover:bg-accent transition text-sm text-muted-foreground hover:text-foreground">
             <Filter className="w-4 h-4" />
             <span className="hidden sm:inline">Filter</span>
           </button>
-          <div className="flex border border-gray-300 rounded-lg overflow-hidden">
+          <div className="flex border border-border rounded-lg overflow-hidden">
             <button
               onClick={() => setView('grid')}
-              className={`p-2.5 transition ${view === 'grid' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-600 hover:bg-gray-50'}`}
+              className={`p-2.5 transition ${view === 'grid' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-accent hover:text-foreground'}`}
             >
               <Grid3x3 className="w-4 h-4" />
             </button>
             <button
               onClick={() => setView('list')}
-              className={`p-2.5 border-l border-gray-300 transition ${view === 'list' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-600 hover:bg-gray-50'}`}
+              className={`p-2.5 border-l border-border transition ${view === 'list' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-accent hover:text-foreground'}`}
             >
               <List className="w-4 h-4" />
             </button>
@@ -150,25 +147,25 @@ export default function ProjectsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filteredProjects.map((project) => (
             <Link href={`/projects/${project.id}`} key={project.id}>
-              <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-gray-200 hover:border-indigo-300 hover:shadow-lg transition cursor-pointer h-full">
+              <div className="bg-card rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-border hover:border-primary/40 hover:shadow-lg transition cursor-pointer h-full">
                 <div className="mb-4">
-                  <h3 className="font-semibold text-gray-900 text-base sm:text-lg mb-1">{project.name}</h3>
-                  <p className="text-xs sm:text-sm text-gray-600">{project.description || 'No description'}</p>
+                  <h3 className="font-semibold text-foreground text-base sm:text-lg mb-1">{project.name}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{project.description || 'No description'}</p>
                 </div>
 
-                <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
+                <div className="flex items-center justify-between mb-4 pb-4 border-b border-border/50">
                   <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${getStatusColor(project.status)}`}>
                     {project.status}
                   </span>
                   <div className="flex items-center gap-1">
-                    <div className="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center text-xs font-medium text-indigo-600">
+                    <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium text-primary">
                       {project._count.proofs}
                     </div>
-                    <span className="text-xs text-gray-500">proofs</span>
+                    <span className="text-xs text-muted-foreground">proofs</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-xs text-gray-600">
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>Owner: {project.owner.name}</span>
                   {project.team && <span>Team: {project.team.name}</span>}
                 </div>
@@ -180,24 +177,24 @@ export default function ProjectsPage() {
 
       {/* List View */}
       {view === 'list' && (
-        <div className="bg-white rounded-xl sm:rounded-2xl border border-gray-200 overflow-hidden">
+        <div className="bg-card rounded-xl sm:rounded-2xl border border-border overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="bg-secondary/40 border-b border-border">
                 <tr>
-                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-900">Project</th>
-                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-900 hidden sm:table-cell">Status</th>
-                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-900 hidden md:table-cell">Owner</th>
-                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-900">Proofs</th>
+                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-foreground">Project</th>
+                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-foreground hidden sm:table-cell">Status</th>
+                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-foreground hidden md:table-cell">Owner</th>
+                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-foreground">Proofs</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-border/60">
                 {filteredProjects.map((project) => (
-                  <tr key={project.id} className="hover:bg-gray-50 transition">
+                  <tr key={project.id} className="hover:bg-accent/40 transition">
                     <td className="px-4 sm:px-6 py-4">
                       <Link href={`/projects/${project.id}`} className="block">
                         <p className="font-medium text-indigo-600 hover:text-indigo-700 text-sm">{project.name}</p>
-                        <p className="text-xs text-gray-500">{project.description || 'No description'}</p>
+                        <p className="text-xs text-muted-foreground">{project.description || 'No description'}</p>
                       </Link>
                     </td>
                     <td className="px-4 sm:px-6 py-4 hidden sm:table-cell">
@@ -206,10 +203,10 @@ export default function ProjectsPage() {
                       </span>
                     </td>
                     <td className="px-4 sm:px-6 py-4 hidden md:table-cell">
-                      <p className="text-sm text-gray-600">{project.owner.name}</p>
+                      <p className="text-sm text-muted-foreground">{project.owner.name}</p>
                     </td>
                     <td className="px-4 sm:px-6 py-4">
-                      <span className="text-sm font-medium text-gray-900">{project._count.proofs}</span>
+                      <span className="text-sm font-medium text-foreground">{project._count.proofs}</span>
                     </td>
                   </tr>
                 ))}
@@ -222,30 +219,30 @@ export default function ProjectsPage() {
       {/* Create Project Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+          <div className="bg-card border border-border rounded-lg p-6 w-full max-w-md mx-4">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold">Create New Project</h2>
+              <h2 className="text-lg font-semibold text-foreground">Create New Project</h2>
               <button onClick={() => setShowCreateModal(false)}>
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5 text-muted-foreground" />
               </button>
             </div>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Project Name</label>
+                <label className="block text-sm font-medium text-foreground mb-1">Project Name</label>
                 <input
                   type="text"
                   value={newProjectName}
                   onChange={(e) => setNewProjectName(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 border border-input bg-background text-foreground rounded-lg focus:ring-2 focus:ring-ring"
                   placeholder="Enter project name"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Description</label>
+                <label className="block text-sm font-medium text-foreground mb-1">Description</label>
                 <textarea
                   value={newProjectDescription}
                   onChange={(e) => setNewProjectDescription(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 border border-input bg-background text-foreground rounded-lg focus:ring-2 focus:ring-ring"
                   placeholder="Enter project description"
                   rows={3}
                 />

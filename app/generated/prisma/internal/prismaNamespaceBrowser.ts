@@ -61,7 +61,10 @@ export const ModelName = {
   Proof: 'Proof',
   ComplianceItem: 'ComplianceItem',
   AuditLog: 'AuditLog',
-  RaciEntry: 'RaciEntry'
+  RaciEntry: 'RaciEntry',
+  ProjectTaskTemplate: 'ProjectTaskTemplate',
+  ProjectTask: 'ProjectTask',
+  TaskProof: 'TaskProof'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -214,6 +217,65 @@ export const RaciEntryScalarFieldEnum = {
 } as const
 
 export type RaciEntryScalarFieldEnum = (typeof RaciEntryScalarFieldEnum)[keyof typeof RaciEntryScalarFieldEnum]
+
+
+export const ProjectTaskTemplateScalarFieldEnum = {
+  id: 'id',
+  sequence: 'sequence',
+  stage: 'stage',
+  name: 'name',
+  responsible: 'responsible',
+  accountable: 'accountable',
+  consulted: 'consulted',
+  informed: 'informed',
+  costCr: 'costCr',
+  timeDays: 'timeDays',
+  costWeight: 'costWeight',
+  timeWeight: 'timeWeight',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProjectTaskTemplateScalarFieldEnum = (typeof ProjectTaskTemplateScalarFieldEnum)[keyof typeof ProjectTaskTemplateScalarFieldEnum]
+
+
+export const ProjectTaskScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  templateId: 'templateId',
+  sequence: 'sequence',
+  stage: 'stage',
+  name: 'name',
+  responsible: 'responsible',
+  accountable: 'accountable',
+  consulted: 'consulted',
+  informed: 'informed',
+  status: 'status',
+  costCr: 'costCr',
+  timeDays: 'timeDays',
+  costWeight: 'costWeight',
+  timeWeight: 'timeWeight',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProjectTaskScalarFieldEnum = (typeof ProjectTaskScalarFieldEnum)[keyof typeof ProjectTaskScalarFieldEnum]
+
+
+export const TaskProofScalarFieldEnum = {
+  id: 'id',
+  taskId: 'taskId',
+  projectId: 'projectId',
+  type: 'type',
+  fileUrl: 'fileUrl',
+  note: 'note',
+  uploadedAt: 'uploadedAt',
+  uploadedBy: 'uploadedBy'
+} as const
+
+export type TaskProofScalarFieldEnum = (typeof TaskProofScalarFieldEnum)[keyof typeof TaskProofScalarFieldEnum]
 
 
 export const SortOrder = {

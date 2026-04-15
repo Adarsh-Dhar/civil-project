@@ -12,13 +12,13 @@ export default function DashboardPage() {
   return (
     <div className="p-4 sm:p-6 lg:p-8">
       {/* Tab Navigation */}
-      <div className="flex gap-4 sm:gap-6 mb-6 sm:mb-8 border-b border-gray-200 pb-3 sm:pb-4 overflow-x-auto">
+      <div className="flex gap-4 sm:gap-6 mb-6 sm:mb-8 border-b border-border pb-3 sm:pb-4 overflow-x-auto">
         <button
           onClick={() => setActiveTab('dashboard')}
           className={`font-medium text-xs sm:text-sm whitespace-nowrap transition-colors pb-2 border-b-2 ${
             activeTab === 'dashboard'
               ? 'text-indigo-600 border-indigo-600'
-              : 'text-gray-600 border-transparent hover:text-gray-900'
+              : 'text-muted-foreground border-transparent hover:text-foreground'
           }`}
         >
           Project Dashboard
@@ -28,7 +28,7 @@ export default function DashboardPage() {
           className={`font-medium text-xs sm:text-sm whitespace-nowrap transition-colors pb-2 border-b-2 ${
             activeTab === 'table'
               ? 'text-indigo-600 border-indigo-600'
-              : 'text-gray-600 border-transparent hover:text-gray-900'
+              : 'text-muted-foreground border-transparent hover:text-foreground'
           }`}
         >
           RACI Matrix
@@ -53,8 +53,8 @@ export default function DashboardPage() {
       {activeTab === 'table' && (
         <div className="space-y-4 sm:space-y-6">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Construction Workflow</h1>
-            <p className="text-gray-600 text-xs sm:text-sm">Manage tasks with RACI matrix and proof documentation</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-foreground mb-2">Construction Workflow</h1>
+            <p className="text-muted-foreground text-xs sm:text-sm">Manage tasks with RACI matrix and proof documentation</p>
           </div>
           <RACITable />
         </div>

@@ -225,9 +225,11 @@ export type ProjectWhereInput = {
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   team?: Prisma.XOR<Prisma.TeamNullableScalarRelationFilter, Prisma.TeamWhereInput> | null
   proofs?: Prisma.ProofListRelationFilter
+  taskProofs?: Prisma.TaskProofListRelationFilter
   compliance?: Prisma.ComplianceItemListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   raciEntries?: Prisma.RaciEntryListRelationFilter
+  tasks?: Prisma.ProjectTaskListRelationFilter
 }
 
 export type ProjectOrderByWithRelationInput = {
@@ -244,9 +246,11 @@ export type ProjectOrderByWithRelationInput = {
   owner?: Prisma.UserOrderByWithRelationInput
   team?: Prisma.TeamOrderByWithRelationInput
   proofs?: Prisma.ProofOrderByRelationAggregateInput
+  taskProofs?: Prisma.TaskProofOrderByRelationAggregateInput
   compliance?: Prisma.ComplianceItemOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   raciEntries?: Prisma.RaciEntryOrderByRelationAggregateInput
+  tasks?: Prisma.ProjectTaskOrderByRelationAggregateInput
 }
 
 export type ProjectWhereUniqueInput = Prisma.AtLeast<{
@@ -266,9 +270,11 @@ export type ProjectWhereUniqueInput = Prisma.AtLeast<{
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   team?: Prisma.XOR<Prisma.TeamNullableScalarRelationFilter, Prisma.TeamWhereInput> | null
   proofs?: Prisma.ProofListRelationFilter
+  taskProofs?: Prisma.TaskProofListRelationFilter
   compliance?: Prisma.ComplianceItemListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   raciEntries?: Prisma.RaciEntryListRelationFilter
+  tasks?: Prisma.ProjectTaskListRelationFilter
 }, "id">
 
 export type ProjectOrderByWithAggregationInput = {
@@ -315,9 +321,11 @@ export type ProjectCreateInput = {
   owner: Prisma.UserCreateNestedOneWithoutOwnedProjectsInput
   team?: Prisma.TeamCreateNestedOneWithoutProjectsInput
   proofs?: Prisma.ProofCreateNestedManyWithoutProjectInput
+  taskProofs?: Prisma.TaskProofCreateNestedManyWithoutProjectInput
   compliance?: Prisma.ComplianceItemCreateNestedManyWithoutProjectInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutProjectInput
   raciEntries?: Prisma.RaciEntryCreateNestedManyWithoutProjectInput
+  tasks?: Prisma.ProjectTaskCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUncheckedCreateInput = {
@@ -332,9 +340,11 @@ export type ProjectUncheckedCreateInput = {
   ownerId: string
   teamId?: string | null
   proofs?: Prisma.ProofUncheckedCreateNestedManyWithoutProjectInput
+  taskProofs?: Prisma.TaskProofUncheckedCreateNestedManyWithoutProjectInput
   compliance?: Prisma.ComplianceItemUncheckedCreateNestedManyWithoutProjectInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutProjectInput
   raciEntries?: Prisma.RaciEntryUncheckedCreateNestedManyWithoutProjectInput
+  tasks?: Prisma.ProjectTaskUncheckedCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUpdateInput = {
@@ -349,9 +359,11 @@ export type ProjectUpdateInput = {
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedProjectsNestedInput
   team?: Prisma.TeamUpdateOneWithoutProjectsNestedInput
   proofs?: Prisma.ProofUpdateManyWithoutProjectNestedInput
+  taskProofs?: Prisma.TaskProofUpdateManyWithoutProjectNestedInput
   compliance?: Prisma.ComplianceItemUpdateManyWithoutProjectNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutProjectNestedInput
   raciEntries?: Prisma.RaciEntryUpdateManyWithoutProjectNestedInput
+  tasks?: Prisma.ProjectTaskUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateInput = {
@@ -366,9 +378,11 @@ export type ProjectUncheckedUpdateInput = {
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proofs?: Prisma.ProofUncheckedUpdateManyWithoutProjectNestedInput
+  taskProofs?: Prisma.TaskProofUncheckedUpdateManyWithoutProjectNestedInput
   compliance?: Prisma.ComplianceItemUncheckedUpdateManyWithoutProjectNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutProjectNestedInput
   raciEntries?: Prisma.RaciEntryUncheckedUpdateManyWithoutProjectNestedInput
+  tasks?: Prisma.ProjectTaskUncheckedUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectCreateManyInput = {
@@ -602,6 +616,34 @@ export type ProjectUpdateOneRequiredWithoutRaciEntriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProjectUpdateToOneWithWhereWithoutRaciEntriesInput, Prisma.ProjectUpdateWithoutRaciEntriesInput>, Prisma.ProjectUncheckedUpdateWithoutRaciEntriesInput>
 }
 
+export type ProjectCreateNestedOneWithoutTasksInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutTasksInput, Prisma.ProjectUncheckedCreateWithoutTasksInput>
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutTasksInput
+  connect?: Prisma.ProjectWhereUniqueInput
+}
+
+export type ProjectUpdateOneRequiredWithoutTasksNestedInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutTasksInput, Prisma.ProjectUncheckedCreateWithoutTasksInput>
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutTasksInput
+  upsert?: Prisma.ProjectUpsertWithoutTasksInput
+  connect?: Prisma.ProjectWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProjectUpdateToOneWithWhereWithoutTasksInput, Prisma.ProjectUpdateWithoutTasksInput>, Prisma.ProjectUncheckedUpdateWithoutTasksInput>
+}
+
+export type ProjectCreateNestedOneWithoutTaskProofsInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutTaskProofsInput, Prisma.ProjectUncheckedCreateWithoutTaskProofsInput>
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutTaskProofsInput
+  connect?: Prisma.ProjectWhereUniqueInput
+}
+
+export type ProjectUpdateOneRequiredWithoutTaskProofsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutTaskProofsInput, Prisma.ProjectUncheckedCreateWithoutTaskProofsInput>
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutTaskProofsInput
+  upsert?: Prisma.ProjectUpsertWithoutTaskProofsInput
+  connect?: Prisma.ProjectWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProjectUpdateToOneWithWhereWithoutTaskProofsInput, Prisma.ProjectUpdateWithoutTaskProofsInput>, Prisma.ProjectUncheckedUpdateWithoutTaskProofsInput>
+}
+
 export type ProjectCreateWithoutOwnerInput = {
   id?: string
   name: string
@@ -613,9 +655,11 @@ export type ProjectCreateWithoutOwnerInput = {
   updatedAt?: Date | string
   team?: Prisma.TeamCreateNestedOneWithoutProjectsInput
   proofs?: Prisma.ProofCreateNestedManyWithoutProjectInput
+  taskProofs?: Prisma.TaskProofCreateNestedManyWithoutProjectInput
   compliance?: Prisma.ComplianceItemCreateNestedManyWithoutProjectInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutProjectInput
   raciEntries?: Prisma.RaciEntryCreateNestedManyWithoutProjectInput
+  tasks?: Prisma.ProjectTaskCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUncheckedCreateWithoutOwnerInput = {
@@ -629,9 +673,11 @@ export type ProjectUncheckedCreateWithoutOwnerInput = {
   updatedAt?: Date | string
   teamId?: string | null
   proofs?: Prisma.ProofUncheckedCreateNestedManyWithoutProjectInput
+  taskProofs?: Prisma.TaskProofUncheckedCreateNestedManyWithoutProjectInput
   compliance?: Prisma.ComplianceItemUncheckedCreateNestedManyWithoutProjectInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutProjectInput
   raciEntries?: Prisma.RaciEntryUncheckedCreateNestedManyWithoutProjectInput
+  tasks?: Prisma.ProjectTaskUncheckedCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectCreateOrConnectWithoutOwnerInput = {
@@ -687,9 +733,11 @@ export type ProjectCreateWithoutTeamInput = {
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedProjectsInput
   proofs?: Prisma.ProofCreateNestedManyWithoutProjectInput
+  taskProofs?: Prisma.TaskProofCreateNestedManyWithoutProjectInput
   compliance?: Prisma.ComplianceItemCreateNestedManyWithoutProjectInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutProjectInput
   raciEntries?: Prisma.RaciEntryCreateNestedManyWithoutProjectInput
+  tasks?: Prisma.ProjectTaskCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUncheckedCreateWithoutTeamInput = {
@@ -703,9 +751,11 @@ export type ProjectUncheckedCreateWithoutTeamInput = {
   updatedAt?: Date | string
   ownerId: string
   proofs?: Prisma.ProofUncheckedCreateNestedManyWithoutProjectInput
+  taskProofs?: Prisma.TaskProofUncheckedCreateNestedManyWithoutProjectInput
   compliance?: Prisma.ComplianceItemUncheckedCreateNestedManyWithoutProjectInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutProjectInput
   raciEntries?: Prisma.RaciEntryUncheckedCreateNestedManyWithoutProjectInput
+  tasks?: Prisma.ProjectTaskUncheckedCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectCreateOrConnectWithoutTeamInput = {
@@ -745,9 +795,11 @@ export type ProjectCreateWithoutProofsInput = {
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedProjectsInput
   team?: Prisma.TeamCreateNestedOneWithoutProjectsInput
+  taskProofs?: Prisma.TaskProofCreateNestedManyWithoutProjectInput
   compliance?: Prisma.ComplianceItemCreateNestedManyWithoutProjectInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutProjectInput
   raciEntries?: Prisma.RaciEntryCreateNestedManyWithoutProjectInput
+  tasks?: Prisma.ProjectTaskCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUncheckedCreateWithoutProofsInput = {
@@ -761,9 +813,11 @@ export type ProjectUncheckedCreateWithoutProofsInput = {
   updatedAt?: Date | string
   ownerId: string
   teamId?: string | null
+  taskProofs?: Prisma.TaskProofUncheckedCreateNestedManyWithoutProjectInput
   compliance?: Prisma.ComplianceItemUncheckedCreateNestedManyWithoutProjectInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutProjectInput
   raciEntries?: Prisma.RaciEntryUncheckedCreateNestedManyWithoutProjectInput
+  tasks?: Prisma.ProjectTaskUncheckedCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectCreateOrConnectWithoutProofsInput = {
@@ -793,9 +847,11 @@ export type ProjectUpdateWithoutProofsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedProjectsNestedInput
   team?: Prisma.TeamUpdateOneWithoutProjectsNestedInput
+  taskProofs?: Prisma.TaskProofUpdateManyWithoutProjectNestedInput
   compliance?: Prisma.ComplianceItemUpdateManyWithoutProjectNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutProjectNestedInput
   raciEntries?: Prisma.RaciEntryUpdateManyWithoutProjectNestedInput
+  tasks?: Prisma.ProjectTaskUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateWithoutProofsInput = {
@@ -809,9 +865,11 @@ export type ProjectUncheckedUpdateWithoutProofsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskProofs?: Prisma.TaskProofUncheckedUpdateManyWithoutProjectNestedInput
   compliance?: Prisma.ComplianceItemUncheckedUpdateManyWithoutProjectNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutProjectNestedInput
   raciEntries?: Prisma.RaciEntryUncheckedUpdateManyWithoutProjectNestedInput
+  tasks?: Prisma.ProjectTaskUncheckedUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectCreateWithoutComplianceInput = {
@@ -826,8 +884,10 @@ export type ProjectCreateWithoutComplianceInput = {
   owner: Prisma.UserCreateNestedOneWithoutOwnedProjectsInput
   team?: Prisma.TeamCreateNestedOneWithoutProjectsInput
   proofs?: Prisma.ProofCreateNestedManyWithoutProjectInput
+  taskProofs?: Prisma.TaskProofCreateNestedManyWithoutProjectInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutProjectInput
   raciEntries?: Prisma.RaciEntryCreateNestedManyWithoutProjectInput
+  tasks?: Prisma.ProjectTaskCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUncheckedCreateWithoutComplianceInput = {
@@ -842,8 +902,10 @@ export type ProjectUncheckedCreateWithoutComplianceInput = {
   ownerId: string
   teamId?: string | null
   proofs?: Prisma.ProofUncheckedCreateNestedManyWithoutProjectInput
+  taskProofs?: Prisma.TaskProofUncheckedCreateNestedManyWithoutProjectInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutProjectInput
   raciEntries?: Prisma.RaciEntryUncheckedCreateNestedManyWithoutProjectInput
+  tasks?: Prisma.ProjectTaskUncheckedCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectCreateOrConnectWithoutComplianceInput = {
@@ -874,8 +936,10 @@ export type ProjectUpdateWithoutComplianceInput = {
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedProjectsNestedInput
   team?: Prisma.TeamUpdateOneWithoutProjectsNestedInput
   proofs?: Prisma.ProofUpdateManyWithoutProjectNestedInput
+  taskProofs?: Prisma.TaskProofUpdateManyWithoutProjectNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutProjectNestedInput
   raciEntries?: Prisma.RaciEntryUpdateManyWithoutProjectNestedInput
+  tasks?: Prisma.ProjectTaskUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateWithoutComplianceInput = {
@@ -890,8 +954,10 @@ export type ProjectUncheckedUpdateWithoutComplianceInput = {
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proofs?: Prisma.ProofUncheckedUpdateManyWithoutProjectNestedInput
+  taskProofs?: Prisma.TaskProofUncheckedUpdateManyWithoutProjectNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutProjectNestedInput
   raciEntries?: Prisma.RaciEntryUncheckedUpdateManyWithoutProjectNestedInput
+  tasks?: Prisma.ProjectTaskUncheckedUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectCreateWithoutAuditLogsInput = {
@@ -906,8 +972,10 @@ export type ProjectCreateWithoutAuditLogsInput = {
   owner: Prisma.UserCreateNestedOneWithoutOwnedProjectsInput
   team?: Prisma.TeamCreateNestedOneWithoutProjectsInput
   proofs?: Prisma.ProofCreateNestedManyWithoutProjectInput
+  taskProofs?: Prisma.TaskProofCreateNestedManyWithoutProjectInput
   compliance?: Prisma.ComplianceItemCreateNestedManyWithoutProjectInput
   raciEntries?: Prisma.RaciEntryCreateNestedManyWithoutProjectInput
+  tasks?: Prisma.ProjectTaskCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUncheckedCreateWithoutAuditLogsInput = {
@@ -922,8 +990,10 @@ export type ProjectUncheckedCreateWithoutAuditLogsInput = {
   ownerId: string
   teamId?: string | null
   proofs?: Prisma.ProofUncheckedCreateNestedManyWithoutProjectInput
+  taskProofs?: Prisma.TaskProofUncheckedCreateNestedManyWithoutProjectInput
   compliance?: Prisma.ComplianceItemUncheckedCreateNestedManyWithoutProjectInput
   raciEntries?: Prisma.RaciEntryUncheckedCreateNestedManyWithoutProjectInput
+  tasks?: Prisma.ProjectTaskUncheckedCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectCreateOrConnectWithoutAuditLogsInput = {
@@ -954,8 +1024,10 @@ export type ProjectUpdateWithoutAuditLogsInput = {
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedProjectsNestedInput
   team?: Prisma.TeamUpdateOneWithoutProjectsNestedInput
   proofs?: Prisma.ProofUpdateManyWithoutProjectNestedInput
+  taskProofs?: Prisma.TaskProofUpdateManyWithoutProjectNestedInput
   compliance?: Prisma.ComplianceItemUpdateManyWithoutProjectNestedInput
   raciEntries?: Prisma.RaciEntryUpdateManyWithoutProjectNestedInput
+  tasks?: Prisma.ProjectTaskUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateWithoutAuditLogsInput = {
@@ -970,8 +1042,10 @@ export type ProjectUncheckedUpdateWithoutAuditLogsInput = {
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proofs?: Prisma.ProofUncheckedUpdateManyWithoutProjectNestedInput
+  taskProofs?: Prisma.TaskProofUncheckedUpdateManyWithoutProjectNestedInput
   compliance?: Prisma.ComplianceItemUncheckedUpdateManyWithoutProjectNestedInput
   raciEntries?: Prisma.RaciEntryUncheckedUpdateManyWithoutProjectNestedInput
+  tasks?: Prisma.ProjectTaskUncheckedUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectCreateWithoutRaciEntriesInput = {
@@ -986,8 +1060,10 @@ export type ProjectCreateWithoutRaciEntriesInput = {
   owner: Prisma.UserCreateNestedOneWithoutOwnedProjectsInput
   team?: Prisma.TeamCreateNestedOneWithoutProjectsInput
   proofs?: Prisma.ProofCreateNestedManyWithoutProjectInput
+  taskProofs?: Prisma.TaskProofCreateNestedManyWithoutProjectInput
   compliance?: Prisma.ComplianceItemCreateNestedManyWithoutProjectInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutProjectInput
+  tasks?: Prisma.ProjectTaskCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUncheckedCreateWithoutRaciEntriesInput = {
@@ -1002,8 +1078,10 @@ export type ProjectUncheckedCreateWithoutRaciEntriesInput = {
   ownerId: string
   teamId?: string | null
   proofs?: Prisma.ProofUncheckedCreateNestedManyWithoutProjectInput
+  taskProofs?: Prisma.TaskProofUncheckedCreateNestedManyWithoutProjectInput
   compliance?: Prisma.ComplianceItemUncheckedCreateNestedManyWithoutProjectInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutProjectInput
+  tasks?: Prisma.ProjectTaskUncheckedCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectCreateOrConnectWithoutRaciEntriesInput = {
@@ -1034,8 +1112,10 @@ export type ProjectUpdateWithoutRaciEntriesInput = {
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedProjectsNestedInput
   team?: Prisma.TeamUpdateOneWithoutProjectsNestedInput
   proofs?: Prisma.ProofUpdateManyWithoutProjectNestedInput
+  taskProofs?: Prisma.TaskProofUpdateManyWithoutProjectNestedInput
   compliance?: Prisma.ComplianceItemUpdateManyWithoutProjectNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutProjectNestedInput
+  tasks?: Prisma.ProjectTaskUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateWithoutRaciEntriesInput = {
@@ -1050,8 +1130,186 @@ export type ProjectUncheckedUpdateWithoutRaciEntriesInput = {
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proofs?: Prisma.ProofUncheckedUpdateManyWithoutProjectNestedInput
+  taskProofs?: Prisma.TaskProofUncheckedUpdateManyWithoutProjectNestedInput
   compliance?: Prisma.ComplianceItemUncheckedUpdateManyWithoutProjectNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutProjectNestedInput
+  tasks?: Prisma.ProjectTaskUncheckedUpdateManyWithoutProjectNestedInput
+}
+
+export type ProjectCreateWithoutTasksInput = {
+  id?: string
+  name: string
+  description?: string | null
+  status?: string
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedProjectsInput
+  team?: Prisma.TeamCreateNestedOneWithoutProjectsInput
+  proofs?: Prisma.ProofCreateNestedManyWithoutProjectInput
+  taskProofs?: Prisma.TaskProofCreateNestedManyWithoutProjectInput
+  compliance?: Prisma.ComplianceItemCreateNestedManyWithoutProjectInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutProjectInput
+  raciEntries?: Prisma.RaciEntryCreateNestedManyWithoutProjectInput
+}
+
+export type ProjectUncheckedCreateWithoutTasksInput = {
+  id?: string
+  name: string
+  description?: string | null
+  status?: string
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ownerId: string
+  teamId?: string | null
+  proofs?: Prisma.ProofUncheckedCreateNestedManyWithoutProjectInput
+  taskProofs?: Prisma.TaskProofUncheckedCreateNestedManyWithoutProjectInput
+  compliance?: Prisma.ComplianceItemUncheckedCreateNestedManyWithoutProjectInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutProjectInput
+  raciEntries?: Prisma.RaciEntryUncheckedCreateNestedManyWithoutProjectInput
+}
+
+export type ProjectCreateOrConnectWithoutTasksInput = {
+  where: Prisma.ProjectWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProjectCreateWithoutTasksInput, Prisma.ProjectUncheckedCreateWithoutTasksInput>
+}
+
+export type ProjectUpsertWithoutTasksInput = {
+  update: Prisma.XOR<Prisma.ProjectUpdateWithoutTasksInput, Prisma.ProjectUncheckedUpdateWithoutTasksInput>
+  create: Prisma.XOR<Prisma.ProjectCreateWithoutTasksInput, Prisma.ProjectUncheckedCreateWithoutTasksInput>
+  where?: Prisma.ProjectWhereInput
+}
+
+export type ProjectUpdateToOneWithWhereWithoutTasksInput = {
+  where?: Prisma.ProjectWhereInput
+  data: Prisma.XOR<Prisma.ProjectUpdateWithoutTasksInput, Prisma.ProjectUncheckedUpdateWithoutTasksInput>
+}
+
+export type ProjectUpdateWithoutTasksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedProjectsNestedInput
+  team?: Prisma.TeamUpdateOneWithoutProjectsNestedInput
+  proofs?: Prisma.ProofUpdateManyWithoutProjectNestedInput
+  taskProofs?: Prisma.TaskProofUpdateManyWithoutProjectNestedInput
+  compliance?: Prisma.ComplianceItemUpdateManyWithoutProjectNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutProjectNestedInput
+  raciEntries?: Prisma.RaciEntryUpdateManyWithoutProjectNestedInput
+}
+
+export type ProjectUncheckedUpdateWithoutTasksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proofs?: Prisma.ProofUncheckedUpdateManyWithoutProjectNestedInput
+  taskProofs?: Prisma.TaskProofUncheckedUpdateManyWithoutProjectNestedInput
+  compliance?: Prisma.ComplianceItemUncheckedUpdateManyWithoutProjectNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutProjectNestedInput
+  raciEntries?: Prisma.RaciEntryUncheckedUpdateManyWithoutProjectNestedInput
+}
+
+export type ProjectCreateWithoutTaskProofsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  status?: string
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedProjectsInput
+  team?: Prisma.TeamCreateNestedOneWithoutProjectsInput
+  proofs?: Prisma.ProofCreateNestedManyWithoutProjectInput
+  compliance?: Prisma.ComplianceItemCreateNestedManyWithoutProjectInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutProjectInput
+  raciEntries?: Prisma.RaciEntryCreateNestedManyWithoutProjectInput
+  tasks?: Prisma.ProjectTaskCreateNestedManyWithoutProjectInput
+}
+
+export type ProjectUncheckedCreateWithoutTaskProofsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  status?: string
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ownerId: string
+  teamId?: string | null
+  proofs?: Prisma.ProofUncheckedCreateNestedManyWithoutProjectInput
+  compliance?: Prisma.ComplianceItemUncheckedCreateNestedManyWithoutProjectInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutProjectInput
+  raciEntries?: Prisma.RaciEntryUncheckedCreateNestedManyWithoutProjectInput
+  tasks?: Prisma.ProjectTaskUncheckedCreateNestedManyWithoutProjectInput
+}
+
+export type ProjectCreateOrConnectWithoutTaskProofsInput = {
+  where: Prisma.ProjectWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProjectCreateWithoutTaskProofsInput, Prisma.ProjectUncheckedCreateWithoutTaskProofsInput>
+}
+
+export type ProjectUpsertWithoutTaskProofsInput = {
+  update: Prisma.XOR<Prisma.ProjectUpdateWithoutTaskProofsInput, Prisma.ProjectUncheckedUpdateWithoutTaskProofsInput>
+  create: Prisma.XOR<Prisma.ProjectCreateWithoutTaskProofsInput, Prisma.ProjectUncheckedCreateWithoutTaskProofsInput>
+  where?: Prisma.ProjectWhereInput
+}
+
+export type ProjectUpdateToOneWithWhereWithoutTaskProofsInput = {
+  where?: Prisma.ProjectWhereInput
+  data: Prisma.XOR<Prisma.ProjectUpdateWithoutTaskProofsInput, Prisma.ProjectUncheckedUpdateWithoutTaskProofsInput>
+}
+
+export type ProjectUpdateWithoutTaskProofsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedProjectsNestedInput
+  team?: Prisma.TeamUpdateOneWithoutProjectsNestedInput
+  proofs?: Prisma.ProofUpdateManyWithoutProjectNestedInput
+  compliance?: Prisma.ComplianceItemUpdateManyWithoutProjectNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutProjectNestedInput
+  raciEntries?: Prisma.RaciEntryUpdateManyWithoutProjectNestedInput
+  tasks?: Prisma.ProjectTaskUpdateManyWithoutProjectNestedInput
+}
+
+export type ProjectUncheckedUpdateWithoutTaskProofsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proofs?: Prisma.ProofUncheckedUpdateManyWithoutProjectNestedInput
+  compliance?: Prisma.ComplianceItemUncheckedUpdateManyWithoutProjectNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutProjectNestedInput
+  raciEntries?: Prisma.RaciEntryUncheckedUpdateManyWithoutProjectNestedInput
+  tasks?: Prisma.ProjectTaskUncheckedUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectCreateManyOwnerInput = {
@@ -1077,9 +1335,11 @@ export type ProjectUpdateWithoutOwnerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   team?: Prisma.TeamUpdateOneWithoutProjectsNestedInput
   proofs?: Prisma.ProofUpdateManyWithoutProjectNestedInput
+  taskProofs?: Prisma.TaskProofUpdateManyWithoutProjectNestedInput
   compliance?: Prisma.ComplianceItemUpdateManyWithoutProjectNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutProjectNestedInput
   raciEntries?: Prisma.RaciEntryUpdateManyWithoutProjectNestedInput
+  tasks?: Prisma.ProjectTaskUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateWithoutOwnerInput = {
@@ -1093,9 +1353,11 @@ export type ProjectUncheckedUpdateWithoutOwnerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proofs?: Prisma.ProofUncheckedUpdateManyWithoutProjectNestedInput
+  taskProofs?: Prisma.TaskProofUncheckedUpdateManyWithoutProjectNestedInput
   compliance?: Prisma.ComplianceItemUncheckedUpdateManyWithoutProjectNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutProjectNestedInput
   raciEntries?: Prisma.RaciEntryUncheckedUpdateManyWithoutProjectNestedInput
+  tasks?: Prisma.ProjectTaskUncheckedUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateManyWithoutOwnerInput = {
@@ -1133,9 +1395,11 @@ export type ProjectUpdateWithoutTeamInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedProjectsNestedInput
   proofs?: Prisma.ProofUpdateManyWithoutProjectNestedInput
+  taskProofs?: Prisma.TaskProofUpdateManyWithoutProjectNestedInput
   compliance?: Prisma.ComplianceItemUpdateManyWithoutProjectNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutProjectNestedInput
   raciEntries?: Prisma.RaciEntryUpdateManyWithoutProjectNestedInput
+  tasks?: Prisma.ProjectTaskUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateWithoutTeamInput = {
@@ -1149,9 +1413,11 @@ export type ProjectUncheckedUpdateWithoutTeamInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   proofs?: Prisma.ProofUncheckedUpdateManyWithoutProjectNestedInput
+  taskProofs?: Prisma.TaskProofUncheckedUpdateManyWithoutProjectNestedInput
   compliance?: Prisma.ComplianceItemUncheckedUpdateManyWithoutProjectNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutProjectNestedInput
   raciEntries?: Prisma.RaciEntryUncheckedUpdateManyWithoutProjectNestedInput
+  tasks?: Prisma.ProjectTaskUncheckedUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateManyWithoutTeamInput = {
@@ -1173,16 +1439,20 @@ export type ProjectUncheckedUpdateManyWithoutTeamInput = {
 
 export type ProjectCountOutputType = {
   proofs: number
+  taskProofs: number
   compliance: number
   auditLogs: number
   raciEntries: number
+  tasks: number
 }
 
 export type ProjectCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   proofs?: boolean | ProjectCountOutputTypeCountProofsArgs
+  taskProofs?: boolean | ProjectCountOutputTypeCountTaskProofsArgs
   compliance?: boolean | ProjectCountOutputTypeCountComplianceArgs
   auditLogs?: boolean | ProjectCountOutputTypeCountAuditLogsArgs
   raciEntries?: boolean | ProjectCountOutputTypeCountRaciEntriesArgs
+  tasks?: boolean | ProjectCountOutputTypeCountTasksArgs
 }
 
 /**
@@ -1200,6 +1470,13 @@ export type ProjectCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
  */
 export type ProjectCountOutputTypeCountProofsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ProofWhereInput
+}
+
+/**
+ * ProjectCountOutputType without action
+ */
+export type ProjectCountOutputTypeCountTaskProofsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TaskProofWhereInput
 }
 
 /**
@@ -1223,6 +1500,13 @@ export type ProjectCountOutputTypeCountRaciEntriesArgs<ExtArgs extends runtime.T
   where?: Prisma.RaciEntryWhereInput
 }
 
+/**
+ * ProjectCountOutputType without action
+ */
+export type ProjectCountOutputTypeCountTasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProjectTaskWhereInput
+}
+
 
 export type ProjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1238,9 +1522,11 @@ export type ProjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   team?: boolean | Prisma.Project$teamArgs<ExtArgs>
   proofs?: boolean | Prisma.Project$proofsArgs<ExtArgs>
+  taskProofs?: boolean | Prisma.Project$taskProofsArgs<ExtArgs>
   compliance?: boolean | Prisma.Project$complianceArgs<ExtArgs>
   auditLogs?: boolean | Prisma.Project$auditLogsArgs<ExtArgs>
   raciEntries?: boolean | Prisma.Project$raciEntriesArgs<ExtArgs>
+  tasks?: boolean | Prisma.Project$tasksArgs<ExtArgs>
   _count?: boolean | Prisma.ProjectCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["project"]>
 
@@ -1292,9 +1578,11 @@ export type ProjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   team?: boolean | Prisma.Project$teamArgs<ExtArgs>
   proofs?: boolean | Prisma.Project$proofsArgs<ExtArgs>
+  taskProofs?: boolean | Prisma.Project$taskProofsArgs<ExtArgs>
   compliance?: boolean | Prisma.Project$complianceArgs<ExtArgs>
   auditLogs?: boolean | Prisma.Project$auditLogsArgs<ExtArgs>
   raciEntries?: boolean | Prisma.Project$raciEntriesArgs<ExtArgs>
+  tasks?: boolean | Prisma.Project$tasksArgs<ExtArgs>
   _count?: boolean | Prisma.ProjectCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProjectIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1312,9 +1600,11 @@ export type $ProjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     owner: Prisma.$UserPayload<ExtArgs>
     team: Prisma.$TeamPayload<ExtArgs> | null
     proofs: Prisma.$ProofPayload<ExtArgs>[]
+    taskProofs: Prisma.$TaskProofPayload<ExtArgs>[]
     compliance: Prisma.$ComplianceItemPayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     raciEntries: Prisma.$RaciEntryPayload<ExtArgs>[]
+    tasks: Prisma.$ProjectTaskPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1724,9 +2014,11 @@ export interface Prisma__ProjectClient<T, Null = never, ExtArgs extends runtime.
   owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   team<T extends Prisma.Project$teamArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$teamArgs<ExtArgs>>): Prisma.Prisma__TeamClient<runtime.Types.Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   proofs<T extends Prisma.Project$proofsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$proofsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProofPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  taskProofs<T extends Prisma.Project$taskProofsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$taskProofsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskProofPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   compliance<T extends Prisma.Project$complianceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$complianceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ComplianceItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.Project$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   raciEntries<T extends Prisma.Project$raciEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$raciEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RaciEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tasks<T extends Prisma.Project$tasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectTaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2210,6 +2502,30 @@ export type Project$proofsArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
+ * Project.taskProofs
+ */
+export type Project$taskProofsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TaskProof
+   */
+  select?: Prisma.TaskProofSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TaskProof
+   */
+  omit?: Prisma.TaskProofOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TaskProofInclude<ExtArgs> | null
+  where?: Prisma.TaskProofWhereInput
+  orderBy?: Prisma.TaskProofOrderByWithRelationInput | Prisma.TaskProofOrderByWithRelationInput[]
+  cursor?: Prisma.TaskProofWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TaskProofScalarFieldEnum | Prisma.TaskProofScalarFieldEnum[]
+}
+
+/**
  * Project.compliance
  */
 export type Project$complianceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2279,6 +2595,30 @@ export type Project$raciEntriesArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.RaciEntryScalarFieldEnum | Prisma.RaciEntryScalarFieldEnum[]
+}
+
+/**
+ * Project.tasks
+ */
+export type Project$tasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProjectTask
+   */
+  select?: Prisma.ProjectTaskSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProjectTask
+   */
+  omit?: Prisma.ProjectTaskOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectTaskInclude<ExtArgs> | null
+  where?: Prisma.ProjectTaskWhereInput
+  orderBy?: Prisma.ProjectTaskOrderByWithRelationInput | Prisma.ProjectTaskOrderByWithRelationInput[]
+  cursor?: Prisma.ProjectTaskWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProjectTaskScalarFieldEnum | Prisma.ProjectTaskScalarFieldEnum[]
 }
 
 /**

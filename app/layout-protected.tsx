@@ -11,7 +11,7 @@ export function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const [activeNav, setActiveNav] = useState('overview');
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-background">
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div
@@ -41,7 +41,7 @@ export function ProtectedLayout({ children }: { children: React.ReactNode }) {
         />
 
         {/* Content Area */}
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1 overflow-auto bg-background">
           {children}
         </div>
       </div>

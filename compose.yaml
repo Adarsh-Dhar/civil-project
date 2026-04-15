@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: civil-project-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: civil_project
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d civil_project"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    container_name: civil-project-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3001:3000"
+    environment:
+      NODE_ENV: production
+      NEXTAUTH_URL: http://localhost:3001
+      NEXTAUTH_SECRET: dev-secret-key-change-in-production
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/civil_project
+      EMAIL_SERVER_HOST: smtp.example.com
+      EMAIL_SERVER_PORT: "587"
+      EMAIL_SERVER_USER: dev@example.com
+      EMAIL_SERVER_PASS: password
+      EMAIL_FROM: dev@example.com
+    command: >
+      sh -c "pnpm prisma generate && pnpm prisma migrate deploy && pnpm prisma db seed && pnpm start"
+
+volumes:
+  postgres_data:
